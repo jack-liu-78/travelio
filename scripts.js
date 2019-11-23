@@ -100,8 +100,8 @@ function leaveInput(e) {
     }
     startDate = moment.max(startDates);
     endDate = moment.min(endDates);
-    let tripLength = moment.duration(startDate.diff(endDate)).days();
-    let events = [];
+    let tripLength = moment.duration(endDate.diff(startDate)).days();
+    events = [];
     for (let i = 0; i < tripLength; i++) {
         events.push([]);
     }
@@ -127,7 +127,7 @@ function loadPeople() {
 }
 
 function loadDays() {
-    let tripLength = moment.duration(startDate.diff(endDate)).days();
+    let tripLength = moment.duration(endDate.diff(startDate)).days();
     for (let i = 0; i < weekdays.length && i < tripLength; i++) {
         document.getElementById("week-day-name-" + i.toString()).innerHTML = 
             startDate.add(i, 'days').add(dayDisplayOffset, 'days').format("ddd, MMM Do YYYY");
@@ -224,6 +224,7 @@ function loadEvents() {
 }
 
 function addEvent(name, cost, day) {
+    console.log(events);
     let person = 'eventPers'
     let c = cost;
     let d = day;
