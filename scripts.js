@@ -39,15 +39,16 @@ var weekdays = [
         - integrating websockets
     - making it look pretty
 */
-
-
-var events = [[],[],[],[],[],[],[]];
+var events = [];
 
 var budgetItems = [];
 
 var people = [];
 
-var startingDay = 0;
+var startDate;
+var endDate;
+
+var dayDisplayOffset = 0;
 
 var destination = "";
 
@@ -91,6 +92,21 @@ function saveInputParams(n, start, end) {
 function leaveInput(e) {
     e.preventDefault();
     $('#input-page').fadeOut(400);
+    let startDates = [];
+    let endDates = [];
+    for (let i = 0; i < people.length; i++) {
+        startDates.push(people[i].aStart);
+        endDates.push(people[i].aEnd);
+    }
+    startDate = moment.max(startDates);
+    endDate = moment.min(endDates);
+    let tripLength = moment.duration(startDate.diff(endDate)).days();
+    let events = [];
+    for (let i = 0; i < tripLength; i++) {
+        events.push([]);
+    }
+
+    loadDays();
     loadPeople();
 }
 
@@ -103,17 +119,28 @@ function loadPeople() {
             <div class="person-info">
                 <div class="person-info-title">${p.name}</div>
                 Availability
-                <div class="person-info-time">Start: ${p.aStart}</div>
-                <div class="person-info-time">End: ${p.aEnd}</div>
+                <div class="person-info-time">Start: ${p.aStart.format('MM-DD-YYYY')}</div>
+                <div class="person-info-time">End: ${p.aEnd.format('MM-DD-YYYY')}</div>
             </div>
         </li>`;
     }
 }
 
 function loadDays() {
-    for (let i = 0; i < weekdays.length; i++) {
-        document.getElementById("week-day-name-" + ((i + startingDay) % 7).toString()).innerHTML = weekdays[i];
+    let tripLength = moment.duration(startDate.diff(endDate)).days();
+    for (let i = 0; i < weekdays.length && i < tripLength; i++) {
+        document.getElementById("week-day-name-" + i.toString()).innerHTML = 
+            startDate.add(i, 'days').add(dayDisplayOffset, 'days').format("ddd, MMM Do YYYY");
     }
+}
+
+function changeDayDisplayOffset(direction) {
+    if (direction == "left") {
+        dayDisplayOffset -= 7;
+    } else {
+        dayDisplayOffset += 7;
+    }
+    loadDays();
 }
 
 function render() {
@@ -124,8 +151,7 @@ function render() {
 }
 
 function resetAll() {
-    startingDay = 0;
-    events = [[],[],[],[],[],[],[]];
+    events = [];
     budgetItems = [];
     people = [];
     if (isSwitched) handleSwitch();
@@ -215,5 +241,3 @@ ws.onmessage = function(serverData){
         console.log(data)
     }
 }
-
-render();

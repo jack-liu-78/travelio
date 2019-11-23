@@ -60,7 +60,8 @@
       <div class="day-name">
         Destination:
       </div>
-      <span id="destination-text"></span>
+      <span id="destination-text" style="padding-left: 3px"></span>
+      <br></br>
       <div class="day-name">
         Travellers:
       </div>
@@ -68,33 +69,39 @@
       </ul>
     </div>
     <div id="week-frame">
-      <div class="week-day">
-        <div class="day-name" id="week-day-name-0"></div>
-        <div class="events-pane" id="week-0-events"></div>
+      <div id="days-toolbar">
+        <button class="btn btn-primary" onclick="changeDayDisplayOffset('left')">&lt;</button>
+        <button class="btn btn-primary" onclick="changeDayDisplayOffset('right')">&gt;</button>
       </div>
-      <div class="week-day">
-        <div class="day-name" id="week-day-name-1"></div>
-        <div class="events-pane" id="week-1-events"></div>
-      </div>
-      <div class="week-day">
-        <div class="day-name" id="week-day-name-2"></div>
-        <div class="events-pane" id="week-2-events"></div>
-      </div>
-      <div class="week-day">
-        <div class="day-name" id="week-day-name-3"></div>
-        <div class="events-pane" id="week-3-events"></div>
-      </div>
-      <div class="week-day">
-        <div class="day-name" id="week-day-name-4"></div>
-        <div class="events-pane" id="week-4-events"></div>
-      </div>
-      <div class="week-day">
-        <div class="day-name" id="week-day-name-5"></div>
-        <div class="events-pane" id="week-5-events"></div>
-      </div>
-      <div class="week-day">
-        <div class="day-name" id="week-day-name-6"></div>
-        <div class="events-pane" id="week-6-events"></div>
+      <div id="days-container">
+        <div class="week-day">
+          <div class="day-name" id="week-day-name-0"></div>
+          <div class="events-pane" id="week-0-events"></div>
+        </div>
+        <div class="week-day">
+          <div class="day-name" id="week-day-name-1"></div>
+          <div class="events-pane" id="week-1-events"></div>
+        </div>
+        <div class="week-day">
+          <div class="day-name" id="week-day-name-2"></div>
+          <div class="events-pane" id="week-2-events"></div>
+        </div>
+        <div class="week-day">
+          <div class="day-name" id="week-day-name-3"></div>
+          <div class="events-pane" id="week-3-events"></div>
+        </div>
+        <div class="week-day">
+          <div class="day-name" id="week-day-name-4"></div>
+          <div class="events-pane" id="week-4-events"></div>
+        </div>
+        <div class="week-day">
+          <div class="day-name" id="week-day-name-5"></div>
+          <div class="events-pane" id="week-5-events"></div>
+        </div>
+        <div class="week-day">
+          <div class="day-name" id="week-day-name-6"></div>
+          <div class="events-pane" id="week-6-events"></div>
+        </div>
       </div>
     </div>
     <div id="budget-frame">
