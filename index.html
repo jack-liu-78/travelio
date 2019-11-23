@@ -14,10 +14,26 @@
   <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
   <link href="styles.css" rel="stylesheet">
+
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+  <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 </head>
 
 <body>
   <!-- Navigation -->
+
+  <div id="input-page" onsubmit="leaveInput(event)">
+    <form id="input-form">
+      <h5 class="mt-5">What's your name?</h5>
+      <input class="inputFields" type="text" id="inputFieldName" name="name" placeholder="Your name..">
+      <h5 class="mt-1">When are you available?</h5>
+      <input class="inputFields" type="text" name="daterange" value="01/01/2018 - 01/15/2018" />
+      <br></br>
+      <button class="btn btn-success submit-button" type="submit">Go</button>
+    </form>
+  </div>
 
   <div id="landing-page" onsubmit="leaveLanding(event)">
     <div class="col-lg-12 text-center" style="position:absolute; top:30%">
@@ -26,7 +42,7 @@
       <div>
         <form id="locationForm">
           <input class="destLoc" type="text" id="destinationLocation" placeholder="Enter a city or country">
-          <button class="btn btn-success" type="submit">Go</button>
+          <button class="btn btn-success submit-button" type="submit">Go</button>
         </form>
       </div>
     </div>
@@ -40,6 +56,17 @@
 
   <!-- Page Content -->
   <div class="mainframe">
+    <div id="info-frame">
+      <div class="day-name">
+        Destination:
+      </div>
+      <span id="destination-text"></span>
+      <div class="day-name">
+        Travellers:
+      </div>
+      <ul id="people-coming">
+      </ul>
+    </div>
     <div id="week-frame">
       <div class="week-day">
         <div class="day-name" id="week-day-name-0"></div>
@@ -91,7 +118,6 @@
   </div>
 
   <!-- Bootstrap core JavaScript -->
-  <script src='https://code.jquery.com/jquery-3.4.1.min.js'></script>
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
   <script src="scripts.js"></script>
 </body>

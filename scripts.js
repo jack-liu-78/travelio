@@ -23,9 +23,29 @@ var weekdays = [
 - in event creation dialogue, only allow a choice within the date range? or just pick within for the demo
 */
 
+/*
+    - figure out availbility
+        - display available days
+    - format budget as a table
+    - split costs functionality
+    - move buttons at bottom to somewhere else
+    - 'add to budget' popup ui
+    - 'add event' popup ui
+        - travel
+        - accomodations
+        - restaurants
+        - custom
+    - hosting (GCP)
+        - integrating websockets
+    - making it look pretty
+*/
+
+
 var events = [[],[],[],[],[],[],[]];
 
 var budgetItems = [];
+
+var people = [];
 
 var startingDay = 0;
 
@@ -33,7 +53,59 @@ var destination = "";
 
 function leaveLanding(e) {
     e.preventDefault();
-    
+    destination = document.getElementById('destinationLocation').value;
+    document.getElementById('destination-text').innerHTML = 
+        destination[0].toUpperCase() + destination.substring(1, destination.length).toLowerCase();
+    $('#landing-page').animate({
+        'top': '-=100%'
+    }, 1000);
+    $('#landing-page').fadeOut(400);
+}
+
+$(function() {
+    $('input[name="daterange"]').daterangepicker({
+        opens: 'left'
+    }, function(start, end, label) {
+        let n = document.getElementById('inputFieldName').value;
+        saveInputParams(n, start, end);
+        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+    });
+});
+
+function saveInputParams(n, start, end) {
+    let setPerson = true;
+    for (let i = 0; i < people.length; i++) {
+        if (people[i].name == n) {
+            people[i].aStart = start;
+            people[i].aEnd = end;
+            setPerson = false;
+        }
+    }
+    if (setPerson) {
+        people.push({name: n, aStart: start, aEnd: end});
+    }
+}
+
+function leaveInput(e) {
+    e.preventDefault();
+    $('#input-page').fadeOut(400);
+    loadPeople();
+}
+
+function loadPeople() {
+    document.getElementById("people-coming").innerHTML = "";
+    for (let i = 0; i < people.length; i++) {
+        let p = people[i];
+        document.getElementById("people-coming").innerHTML += 
+        `<li>
+            <div class="person-info">
+                <div class="person-info-title">${p.name}</div>
+                Availability
+                <div class="person-info-time">Start: ${p.aStart}</div>
+                <div class="person-info-time">End: ${p.aEnd}</div>
+            </div>
+        </li>`;
+    }
 }
 
 function loadDays() {
@@ -46,12 +118,14 @@ function render() {
     loadDays();
     loadBudget();
     loadEvents();
+    loadPeople();
 }
 
 function resetAll() {
     startingDay = 0;
     events = [[],[],[],[],[],[],[]];
     budgetItems = [];
+    people = [];
     if (isSwitched) handleSwitch();
     render();
 }
@@ -105,13 +179,13 @@ var isSwitched = false;
 function handleSwitch() {
     if (!isSwitched) {
         $('#week-frame').animate({
-            'width': '-=30%'
+            'width': '-=25%'
         }, 375);
         setTimeout(() => $('#budget-frame').fadeIn(375), 200);
         isSwitched = true;
     } else {
         $('#week-frame').animate({
-            'width': '+=30%'
+            'width': '+=25%'
         }, 375);
         $('#budget-frame').fadeOut(100);
         isSwitched = false;

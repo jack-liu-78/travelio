@@ -1,5 +1,5 @@
 .mainframe {
-    width: 90%;
+    width: 95%;
     height: 600px;
     margin: auto;
     display: flex;
@@ -11,9 +11,30 @@
     height: 100%;
     background-image: url("map.jpg");
     background-color: white;
-    position: fixed;
+    position: absolute;
     background-position: center;
-    display: none;
+}
+
+#input-page {
+    position: absolute;
+    width: 50%;
+    height: 50%;
+    left: 25%;
+    top: 25%;
+    background-color: white;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    text-align: center;
+}
+
+.inputFields {
+    width: 50%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
 }
 
 .destLoc {
@@ -24,6 +45,34 @@
     border: 1px solid #ccc;
     border-radius: 4px;
     box-sizing: border-box;
+}
+
+.submit-button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 12px 20px;
+    margin: 8px 0;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+#info-frame {
+    width: 10%;
+    padding: 10px;
+    text-align: left;
+}
+
+#people-coming {
+    font-size: 12px;
+}
+
+.person-info-title {
+    font-weight: bold;
+}
+
+.person-info-time {
+    font-size: 10px;
 }
 
 #week-frame {
@@ -63,9 +112,8 @@
 #budget-frame {
     display: none;
     height: 100%;
-    border: 1px solid black;
-    width: 30%;
-    position: relative;
+    border: 1px solid blue;
+    width: 25%;
     overflow-y: scroll;
 }
 
