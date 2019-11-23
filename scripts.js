@@ -31,6 +31,8 @@ var startingDay = 0;
 
 var destination = "";
 
+var ws = new WebSocket("ws://127.0.0.1:1112")
+
 function leaveLanding(e) {
     e.preventDefault();
     
@@ -53,6 +55,7 @@ function resetAll() {
     events = [[],[],[],[],[],[],[]];
     budgetItems = [];
     if (isSwitched) handleSwitch();
+    ws.send(JSON.stringify({type: 'reset'}));
     render();
 }
 
@@ -66,6 +69,7 @@ function loadBudget() {
 
 function addBudgetItem(name, cost) {
     let item = {name: name, cost: cost};
+    ws.send(JSON.stringify({type: 'budget', name: name, cost:cost}))
     budgetItems.push(item);
     loadBudget();
 }
@@ -91,6 +95,7 @@ function addEvent(name, cost, day) {
     if (name == "random") {
         c = Math.floor(Math.random() * 200 + 100);
         d = Math.floor(Math.random() * 7);
+    ws.send(JSON.stringify({type:'event', name: name, cost: c, day: d}))
     }
     addBudgetItem(name, c);
     events[d].push({name: name, cost: c});
@@ -118,5 +123,23 @@ function handleSwitch() {
     }
 }
 
+ws.onmessage = function(serverData){
+    data = JSON.parse(serverData.data)
+    if(data['type'] == 'event'){
+        events = data['data'];
+        loadEvents();
+    }
+    else if(data['type'] == 'budget'){
+        budgetItems = data['data'];
+        loadBudget();
+        if(budgetItems.length == 0){
+            if (isSwitched) handleSwitch();
+            render();
+        }
+    }
+    else{
+        console.log(data)
+    }
+}
 
 render();
