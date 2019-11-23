@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="">
+  <meta name="author" content="">
+
+  <title>Travel.io</title>
+
+  <!-- Bootstrap core CSS -->
+  <link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+
+  <link href="styles.css" rel="stylesheet">
+</head>
+
+<body>
+  <!-- Navigation -->
+
+  <div id="landing-page" onsubmit="leaveLanding(event)">
+    <div class="col-lg-12 text-center" style="position:absolute; top:30%">
+      <h1 class="mt-5">Let's go on an adventure!</h1>
+      <h3 class="mt-3">Where to?</h3>
+      <div>
+        <form id="locationForm">
+          <input class="destLoc" type="text" id="destinationLocation" placeholder="Enter a city or country">
+          <button class="btn btn-success" type="submit">Go</button>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <nav class="navbar navbar-expand-lg navbar-dark bg-dark static-top">
+    <div class="container">
+      <a class="navbar-brand" href="#">Travel.io</a>
+    </div>
+  </nav>
+
+  <!-- Page Content -->
+  <div class="mainframe">
+    <div id="week-frame">
+      <div class="week-day">
+        <div class="day-name" id="week-day-name-0"></div>
+        <div class="events-pane" id="week-0-events"></div>
+      </div>
+      <div class="week-day">
+        <div class="day-name" id="week-day-name-1"></div>
+        <div class="events-pane" id="week-1-events"></div>
+      </div>
+      <div class="week-day">
+        <div class="day-name" id="week-day-name-2"></div>
+        <div class="events-pane" id="week-2-events"></div>
+      </div>
+      <div class="week-day">
+        <div class="day-name" id="week-day-name-3"></div>
+        <div class="events-pane" id="week-3-events"></div>
+      </div>
+      <div class="week-day">
+        <div class="day-name" id="week-day-name-4"></div>
+        <div class="events-pane" id="week-4-events"></div>
+      </div>
+      <div class="week-day">
+        <div class="day-name" id="week-day-name-5"></div>
+        <div class="events-pane" id="week-5-events"></div>
+      </div>
+      <div class="week-day">
+        <div class="day-name" id="week-day-name-6"></div>
+        <div class="events-pane" id="week-6-events"></div>
+      </div>
+    </div>
+    <div id="budget-frame">
+      <div class="section-title">
+        Budget
+      </div>
+      <div class="budget-items-wrap">
+        <ul id="budget-items">
+        </ul>
+      </div>
+      <div class="budget-total-wrap">
+        Total: $<span id="budget-total">0</span>
+      </div>
+    </div>
+  </div>
+  <div class="container" style="margin-top: 5px">
+    <button type="button" class="btn btn-primary" onclick="handleSwitch()">Toggle Budget</button>
+    <button type="button" class="btn btn-danger" onclick="resetAll()">Reset</button>
+    <button type="button" class="btn btn-success" onclick="addBudgetItem('test', 100)">Add to budget</button>
+    <button type="button" class="btn btn-warning" onclick="addEvent('random')">Add random event</button>
+  </div>
+
+  <!-- Bootstrap core JavaScript -->
+  <script src='https://code.jquery.com/jquery-3.4.1.min.js'></script>
+  <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="scripts.js"></script>
+</body>
+
+</html>

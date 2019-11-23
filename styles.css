@@ -1,0 +1,89 @@
+.mainframe {
+    width: 90%;
+    height: 600px;
+    margin: auto;
+    display: flex;
+    flex-direction: row;
+}
+
+#landing-page {
+    width: 100%;
+    height: 100%;
+    background-image: url("map.jpg");
+    background-color: white;
+    position: fixed;
+    background-position: center;
+    display: none;
+}
+
+.destLoc {
+    width: 20%;
+    padding: 12px 20px;
+    margin: 8px 0;
+    display: inline-block;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-sizing: border-box;
+}
+
+#week-frame {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    height: 100%;
+    border: 1px solid black;
+    overflow-y: scroll;
+}
+
+.week-day {
+    width: auto;
+    flex-grow: 1;
+    text-align: center;
+}
+
+.day-name {
+    font-size: 18px;
+}
+
+.events-pane {
+    text-align: center;
+}
+
+.event {
+    margin: 3px;
+    padding: 5px;
+    text-align: center;
+    background: lightgrey;
+}
+
+.event-title {
+    font-weight: bold;
+}
+
+#budget-frame {
+    display: none;
+    height: 100%;
+    border: 1px solid black;
+    width: 30%;
+    position: relative;
+    overflow-y: scroll;
+}
+
+.section-title {
+    font-size: 20px;
+    width: 100%;
+    text-align: center;
+}
+
+#budget-items {
+    width: 100%;
+}
+
+.budget-total-wrap {
+    width: 100%;
+    position: sticky;
+    bottom: 0;
+    text-align: center;
+    padding: 10px;
+    background: lightgray;
+}
