@@ -127,6 +127,11 @@
     width: 100%;
 }
 
+table, th, td {
+    border: 1px solid black;
+    border-collapse: collapse;
+}
+
 .budget-total-wrap {
     width: 100%;
     position: sticky;

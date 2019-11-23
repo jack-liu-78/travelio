@@ -43,7 +43,7 @@ async def time(websocket, path):
             data = json.loads(message)
             print(data)
             if(data['type'] == 'budget'):
-                budgetItems.append({'name': data['name'], 'cost': data['cost']})
+                budgetItems.append({'person': data['person'], 'name': data['name'], 'cost': data['cost']})
                 # await websocket.send(json.dumps({'type': 'budget', 'data': budgetItems}))
                 print(budgetItems)
             elif(data['type'] == 'event'):

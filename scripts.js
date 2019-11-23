@@ -134,19 +134,53 @@ function resetAll() {
 }
 
 function loadBudget() {
-    document.getElementById("budget-items").innerHTML = "";
+    var table = document.getElementById("budget-items");
+    $("#budget-items tbody tr").remove();
+    
+    // document.getElementById("budget-items").innerHTML = "";
+    if (budgetItems.length > 0){
+        var headerRow = table.insertRow(-1);
+        var hcell0 = document.createElement("TH");
+        hcell0.innerHTML = "Person";
+        headerRow.appendChild(hcell0)
+        var hcell1 = document.createElement("TH");
+        hcell1.innerHTML = "Item";        
+        headerRow.appendChild(hcell1)
+        var hcell2 = document.createElement("TH");
+        hcell2.innerHTML = "Cost";
+        headerRow.appendChild(hcell2)
+    }
     for (let i = 0; i < budgetItems.length; i++) {
         let item = budgetItems[i];
-        document.getElementById("budget-items").innerHTML += "<li>" + item.name + ": $" + item.cost + "</li>"
+        // document.getElementById("budget-items").innerHTML += "<li>" + item.name + ": $" + item.cost + "</li>"
+        var row = table.insertRow();
+        var cell0 = row.insertCell(0);
+        var cell1 = row.insertCell(1);
+        var cell2 = row.insertCell(2);
+        cell0.innerHTML = item.person;
+        cell1.innerHTML = item.name;
+        cell2.innerHTML = "$" + item.cost;
     }
 }
 
-function addBudgetItem(name, cost) {
-    let item = {name: name, cost: cost};
-    ws.send(JSON.stringify({type: 'budget', name: name, cost:cost}))
+function addBudgetItem(person, name, cost) {
+    if(typeof(person)=='object'){
+        person = person.value;
+        name = name.value;
+        cost = cost.value;
+    }
+    let item = {person: person, name: name, cost: cost};
+    ws.send(JSON.stringify({type: 'budget', person: person, name: name, cost:cost}))
     budgetItems.push(item);
     loadBudget();
 }
+
+$('#budgetModal').on('hidden.bs.modal', function (e) {
+    $(this)
+      .find("input,textarea")
+         .val('')
+         .end();
+  })
 
 function loadEvents() {
     for (let i = 0; i < 7; i++) {
@@ -164,6 +198,7 @@ function loadEvents() {
 }
 
 function addEvent(name, cost, day) {
+    let person = 'eventPers'
     let c = cost;
     let d = day;
     if (name == "random") {
@@ -171,8 +206,8 @@ function addEvent(name, cost, day) {
         d = Math.floor(Math.random() * 7);
     ws.send(JSON.stringify({type:'event', name: name, cost: c, day: d}))
     }
-    addBudgetItem(name, c);
-    events[d].push({name: name, cost: c});
+    addBudgetItem(person, name, c);
+    events[d].push({person: person, name: name, cost: c});
     document.getElementById(`week-${d}-events`).innerHTML +=
     `<div class="event">
         <div class="event-title">${name}</div>
