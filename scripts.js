@@ -184,13 +184,13 @@ var isSwitched = false;
 function handleSwitch() {
     if (!isSwitched) {
         $('#week-frame').animate({
-            'width': '-=25%'
+            'width': '=65%'
         }, 375);
         setTimeout(() => $('#budget-frame').fadeIn(375), 200);
         isSwitched = true;
     } else {
         $('#week-frame').animate({
-            'width': '+=25%'
+            'width': '=90%'
         }, 375);
         $('#budget-frame').fadeOut(100);
         isSwitched = false;
