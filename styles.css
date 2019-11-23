@@ -124,7 +124,7 @@
     margin: 3px;
     padding: 5px;
     text-align: center;
-    background: lightgrey;
+    background: rgb(238, 238, 238);
 }
 
 .event-title {

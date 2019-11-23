@@ -16,20 +16,12 @@ var weekdays = [
 6. those people pick dates as well
 7. only show a date range that fits what everyone picks
 
-- store the latest starting date and earliest ending date as the limits of the trip
-- events can be indexed based on [0] to [length - 1], then add an offset when calculating the days to show
-    - offset is the earliest starting date
-
 - in event creation dialogue, only allow a choice within the date range? or just pick within for the demo
 */
 
 /*
-    - figure out availbility
-        - display available days
-    - format budget as a table
     - split costs functionality
     - move buttons at bottom to somewhere else
-    - 'add to budget' popup ui
     - 'add event' popup ui
         - travel
         - accomodations
@@ -70,8 +62,13 @@ $(function() {
         opens: 'left'
     }, function(start, end, label) {
         let n = document.getElementById('inputFieldName').value;
-        saveInputParams(n, start, end);
-        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+        let e = moment(end);
+        e.hour(0);
+        e.minute(0);
+        e.second(0);
+        e.millisecond(0);
+        saveInputParams(n, start, e);
+        console.log("A new date selection was made: " + start.toString() + ' to ' + e.toString());
     });
 });
 
@@ -129,18 +126,33 @@ function loadPeople() {
 function loadDays() {
     let tripLength = moment.duration(endDate.diff(startDate)).days();
     for (let i = 0; i < weekdays.length && i < tripLength; i++) {
+        let iDate = moment(startDate);
+        iDate = iDate.add(i, 'days').add(dayDisplayOffset, 'days');
         document.getElementById("week-day-name-" + i.toString()).innerHTML = 
-            startDate.add(i, 'days').add(dayDisplayOffset, 'days').format("ddd, MMM Do YYYY");
+            iDate.format("ddd, MMM Do YYYY");
+        let withinTrip = true;
+        let distStart = moment.duration(iDate.diff(startDate)).days();
+        if (distStart < 0) withinTrip = false;
+        let distEnd = moment.duration(iDate.diff(endDate)).days();
+        if (distEnd > 0) withinTrip = false;
+        if (withinTrip) {
+            document.getElementById("week-day-pane-" + i.toString()).style.backgroundColor = '#bbdfbd';
+        } else {
+            document.getElementById("week-day-pane-" + i.toString()).style.backgroundColor = null;
+        }
     }
+    
+
 }
 
 function changeDayDisplayOffset(direction) {
     if (direction == "left") {
-        dayDisplayOffset -= 7;
+        dayDisplayOffset -= 1;
     } else {
-        dayDisplayOffset += 7;
+        dayDisplayOffset += 1;
     }
     loadDays();
+    loadEvents();
 }
 
 function render() {
@@ -213,11 +225,18 @@ function loadEvents() {
         document.getElementById(`week-${i}-events`).innerHTML = "";
     }
     for (let i = 0; i < 7; i++) {
-        for (let j = 0; j < events[i].length; j++) {
+        let iDate = moment(startDate);
+        iDate = iDate.add(i, 'days').add(dayDisplayOffset, 'days');
+        let index = moment.duration(iDate.diff(startDate)).days();
+        let tripLength = moment.duration(endDate.diff(startDate)).days();
+        if (index < 0 || index >= tripLength) {
+            continue;
+        }
+        for (let j = 0; j < events[index].length; j++) {
             document.getElementById(`week-${i}-events`).innerHTML +=
             `<div class="event">
-                <div class="event-title">${events[i][j].name}</div>
-                <div class="event-cost">${events[i][j].cost}</div>
+                <div class="event-title">${events[index][j].name}</div>
+                <div class="event-cost">${events[index][j].cost}</div>
             </div>`;
         }
     }
