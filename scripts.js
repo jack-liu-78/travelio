@@ -52,6 +52,8 @@ var dayDisplayOffset = 0;
 
 var destination = "";
 
+var totalCost = 0;
+
 var ws = new WebSocket("ws://127.0.0.1:1112")
 
 function leaveLanding(e) {
@@ -154,6 +156,7 @@ function resetAll() {
     events = [];
     budgetItems = [];
     people = [];
+    calculateBudget();
     if (isSwitched) handleSwitch();
     ws.send(JSON.stringify({type: 'reset'}));
     render();
@@ -199,6 +202,16 @@ function addBudgetItem(person, name, cost) {
     ws.send(JSON.stringify({type: 'budget', person: person, name: name, cost:cost}))
     budgetItems.push(item);
     loadBudget();
+    calculateBudget();
+}
+
+function calculateBudget(){
+    totalCost = 0;
+    for(i in budgetItems){
+        totalCost+=parseInt(budgetItems[i]['cost']);
+    }
+    console.log(totalCost)
+    document.getElementById('budget-total').innerHTML = totalCost;
 }
 
 $('#budgetModal').on('hidden.bs.modal', function (e) {
@@ -239,6 +252,7 @@ function addEvent(name, cost, day) {
         <div class="event-title">${name}</div>
         <div class="event-cost">$${c}</div>
     </div>`;
+    calculateBudget();
 }
 
 var isSwitched = false;
@@ -268,6 +282,7 @@ ws.onmessage = function(serverData){
         budgetItems = data['data'];
         loadBudget();
         if(budgetItems.length == 0){
+            calculateBudget();
             if (isSwitched) handleSwitch();
             render();
         }
