@@ -38,6 +38,9 @@ var destination = "";
 
 var totalCost = 0;
 
+var gottenHotels;
+var gottenFlights;
+
 var nextEventDay = 0;
 var local_name = '';
 function setNextEventDay(i) { nextEventDay = i; }
@@ -278,19 +281,19 @@ function splitCosts(){
                             personOwed[oPerson] = -difference
                             console.log(pPerson + " pays " + oPerson + " $" + paidDifference )
                             if(pPerson in owedPayments){
-                                owedPayments[pPerson] = owedPayments[pPerson].concat("; pays " + oPerson + " $" + paidDifference)
+                                owedPayments[pPerson] = owedPayments[pPerson].concat("; " + oPerson + " $" + paidDifference)
                             }
                             else{
-                                owedPayments[pPerson] = "pays " + oPerson + " $" + paidDifference;
+                                owedPayments[pPerson] = "you need to pay " + oPerson + " $" + paidDifference;
                             }
                         }
                         else if(personOwed[pPerson] == 0){
                             console.log(pPerson + " pays " + oPerson + " $" + personOwed[oPerson]);
                             if(pPerson in owedPayments){
-                                owedPayments[pPerson] = owedPayments[pPerson].concat("; pays " + oPerson + " $" + personOwed[oPerson])
+                                owedPayments[pPerson] = owedPayments[pPerson].concat("; " + oPerson + " $" + personOwed[oPerson])
                             }
                             else{
-                                owedPayments[pPerson] = "pays " + oPerson + " $" + personOwed[oPerson];
+                                owedPayments[pPerson] = "you need to pay " + oPerson + " $" + personOwed[oPerson];
                             }
                             personOwed[oPerson] = 0;
                         }
@@ -298,10 +301,10 @@ function splitCosts(){
                             let difference = personOwed[oPerson]
                             console.log(pPerson + "pays " + oPerson + " $" + difference + " but still owes " + personOwed[pPerson])
                             if(pPerson in owedPayments){
-                                owedPayments[pPerson] = owedPayments[pPerson].concat("; pays " + oPerson + " $" + difference)
+                                owedPayments[pPerson] = owedPayments[pPerson].concat("; " + oPerson + " $" + difference)
                             }
                             else{
-                                owedPayments[pPerson] = "pays " + oPerson + " $" + difference
+                                owedPayments[pPerson] = "you need to pay " + oPerson + " $" + difference
                             }
                             owedPayments[pPerson]
                             personOwed[oPerson] = 0;
@@ -315,8 +318,8 @@ function splitCosts(){
         }
     }
     console.log(owedPayments)
-    var table = document.getElementById("budget-repayments");
-    $("#budget-repayments tbody tr").remove();
+    // var table = document.getElementById("budget-repayments");
+    // $("#budget-repayments tbody tr").remove();
 
     // if (!jQuery.isEmptyObject(owedPayments)){
     //     var headerRow = table.insertRow(-1);
@@ -330,11 +333,7 @@ function splitCosts(){
     
     for (item in owedPayments) {
         if(item == local_name){
-            var row = table.insertRow();
-            var cell0 = row.insertCell(0);
-            var cell1 = row.insertCell(1);
-            cell0.innerHTML = item;
-            cell1.innerHTML = owedPayments[item];
+            document.getElementById('budgetRepay').innerHTML = owedPayments[item]
         }
     }
 }
@@ -384,12 +383,12 @@ $('#accomodationsModal').on('shown.bs.modal', function (e) {
     
     //make call to get the accomodation data from backend
     //make sure to clear the the content variable before starting to append new content
-
-    var photo = '<img src='+ test_img +'>'
-    var name = '<h1>'+ test_hotel +'</h1>';
-    var price = '<p>' + String(hotel_price) +'$</p>';
-    var titles = '<div class="titles">' + name + price + '</div>'
-    var hotel_info = `<div class=accomodationsContainer data-dismiss="modal" onclick='addAccomodation("${local_name}","${test_hotel}","${hotel_price}")'>` + photo + titles + `</div>`;
+    let info = getBackendHotels();
+    let photo = '<img src='+ test_img +'>'
+    let name = '<h1>'+ test_hotel +'</h1>';
+    let price = '<p>' + String(hotel_price) +'$</p>';
+    let titles = '<div class="titles">' + name + price + '</div>'
+    let hotel_info = `<div class=accomodationsContainer data-dismiss="modal" onclick='addAccomodation("${local_name}","${test_hotel}","${hotel_price}")'>` + photo + titles + `</div>`;
     console.log(hotel_info);
     var content = $(this).find('.container-fluid');
     content.append(hotel_info);
@@ -488,11 +487,40 @@ ws.onmessage = function(serverData){
         loadPeople();
         // loadDays();
     }
+    else if(data['type'] == 'reset'){
+        document.location.reload(true);
+    }
     else{
         console.log(data)
     }
 }
 
-function testBackend() {
-    
+function getBackendFlights() {
+    $.post({
+        url: "/flights",
+        data: {
+            depart: startDate.format('YYYY-MM-DD'),
+            return: endDate.format('YYYY-MM-DD'),
+            startPoint: "YYZ",
+            destination: destination
+        },
+        success: (e) => {
+            gottenFlights = e;
+        }
+    })
+}
+
+function getBackendHotels() {
+    $.post({
+        url: "/acco",
+        data: {
+            city: destination,
+            checkin: startDate.format('YYYY-MM-DD'),
+            checkout: endDate.format('YYYY-MM-DD'),
+            numPeople: people.length
+        },
+        success: (e) => {
+            gottenHotels = e;
+        }
+    })
 }

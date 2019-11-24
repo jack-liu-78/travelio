@@ -3,9 +3,9 @@ import datetime
 import random
 import websockets
 import json
-from flask import Flask, render_template
+from flask import Flask, render_template, request, jsonify
 import threading
-
+from flights_accomodations import get_flights, get_accomodations
 
 app = Flask(__name__)
 
@@ -15,6 +15,29 @@ def index():
 
 threading.Thread(target=app.run).start()
 
+@app.route("/acco", methods=["POST"])
+def acco():
+    print(request.form)
+    data = {
+        'city': request.form['city'],
+        'checkin': request.form['checkin'],
+        'checkout': request.form['checkout'],
+        'numPeople': request.form['numPeople']
+    }
+    ret = get_accomodations(data['city'], data['checkin'], data['checkout'], data['numPeople'])
+    print(ret)
+    return jsonify(ret)
+
+@app.route("/flights", methods=["POST"])
+def flights():
+    data = {
+        'depart': request.form['depart'],
+        'return': request.form['return'],
+        'startPoint': request.form['startPoint'],
+        'destination': request.form['destination']
+    }
+    ret = get_flights(data['depart'], data['return'], data['startPoint'], data['destination'])
+    return jsonify(ret)
 
 USERS = set()
 budgetItems = []
@@ -39,6 +62,10 @@ async def update_user_list():
     global userList
     for user in USERS:
         await send_data(user, json.dumps({'type': 'userList', 'data': userList}))
+
+async def reset_users():
+    for user in USERS:
+        await send_data(user, json.dumps({'type': 'reset'}))
 
 async def send_data(user, data):
     await user.send(data)
@@ -70,10 +97,11 @@ async def time(websocket, path):
             # print(test)
             elif(data['type'] == 'reset'):
                 budgetItems = []
-                events = [[] for i in range(7)]
+                events = []
                 userList = []
-                await update_users()
-                await update_user_list()
+                # await update_users()
+                # await update_user_list()
+                await reset_users()
             elif(data['type'] == 'userList'):
                 userList.append(data['data'][-1])
                 # print(userList)
