@@ -25,7 +25,6 @@ async def update_users():
 async def send_data(user, data):
     await user.send(data)
     await user.send(data)
-    print('sent', user)
 
 async def time(websocket, path):
     global budgetItems
@@ -38,18 +37,16 @@ async def time(websocket, path):
             # await websocket.send(now)
             # await websocket.send(json.dumps(str(counter)))
             # await notify_users()
-            print(USERS)
         async for message in websocket:
             data = json.loads(message)
             print(data)
             if(data['type'] == 'budget'):
                 budgetItems.append({'person': data['person'], 'name': data['name'], 'cost': data['cost']})
+                print(data['person'])
                 # await websocket.send(json.dumps({'type': 'budget', 'data': budgetItems}))
-                print(budgetItems)
             elif(data['type'] == 'event'):
                 events[data['day']].append({'name': data['name'], 'cost': data['cost']})
                 # await websocket.send(json.dumps({'type': 'event', 'data': events}))
-                print(events)
             # test = await websocket.send(data)
             # print(test)
             elif(data['type'] == 'reset'):

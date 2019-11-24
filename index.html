@@ -117,6 +117,10 @@
       <div class="budget-total-wrap">
         Total: $<span id="budget-total"></span>
       </div>
+      <div class="budget-repayments-wrap">
+        <table id="budget-repayments">
+        </table>
+      </div>
     </div>
   </div>
   <div class="container" style="margin-top: 5px">
@@ -155,7 +159,7 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal" click="clearBudget()">Clear</button>
-          <button type="button" class="btn btn-primary" onclick="addBudgetItem(person, item, cost)" data-dismiss="modal">Add!</button>
+          <button type="button" class="btn btn-primary" onclick="addBudgetItem(document.getElementById('person').value, document.getElementById('item').value, document.getElementById('cost').value)" data-dismiss="modal">Add!</button>
         </div>
       </div>
     </div>

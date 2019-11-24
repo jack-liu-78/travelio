@@ -193,12 +193,13 @@ function loadBudget() {
 }
 
 function addBudgetItem(person, name, cost) {
-    if(typeof(person)=='object'){
+    if(typeof(person)!=='string'){
         person = person.value;
         name = name.value;
         cost = cost.value;
     }
     let item = {person: person, name: name, cost: cost};
+    console.log(item)
     ws.send(JSON.stringify({type: 'budget', person: person, name: name, cost:cost}))
     budgetItems.push(item);
     loadBudget();
@@ -210,8 +211,109 @@ function calculateBudget(){
     for(i in budgetItems){
         totalCost+=parseInt(budgetItems[i]['cost']);
     }
-    console.log(totalCost)
     document.getElementById('budget-total').innerHTML = totalCost;
+    splitCosts();
+}
+
+function splitCosts(){
+    let people = [];
+    for(i in budgetItems){
+        people.push(budgetItems[i]['person']);
+    }
+    people = Array.from(new Set(people));
+    let personPaid = {};
+    let personOwed = {};
+    let owedPayments = {};
+    for(j in people){
+        let totalPaid = 0;
+        for(k in budgetItems){
+            if(budgetItems[k]['person'] == people[j]){
+                totalPaid += parseInt(budgetItems[k]['cost']);
+            }
+        }
+        personPaid[people[j]] = totalPaid
+    }
+    let numberPeople = people.length;
+    perPersonCost = totalCost / numberPeople
+
+    for(person in personPaid){
+        personOwed[person] = personPaid[person] - perPersonCost
+    }
+    console.log(personOwed)
+    for(oPerson in personOwed){
+        if(personOwed[oPerson] == 0){
+            console.log(oPerson + " is settled")
+            // owedPayments[oPerson] = "settled"
+            delete personOwed[oPerson]
+        }
+        else if(personOwed[oPerson] > 0){
+            while(personOwed[oPerson] > 0){
+                for(pPerson in personOwed){
+                    if(personOwed[pPerson] < 0){
+                        personOwed[pPerson] += personOwed[oPerson]  
+                        if(personOwed[pPerson] > 0){
+                            let difference = 0 - personOwed[pPerson]
+                            let paidDifference = personOwed[oPerson] + difference
+                            personOwed[pPerson] += difference
+                            personOwed[oPerson] = -difference
+                            console.log(pPerson + " pays " + oPerson + " $" + paidDifference )
+                            if(pPerson in owedPayments){
+                                owedPayments[pPerson] = owedPayments[pPerson].concat("; pays " + oPerson + " $" + paidDifference)
+                            }
+                            else{
+                                owedPayments[pPerson] = "pays " + oPerson + " $" + paidDifference;
+                            }
+                        }
+                        else if(personOwed[pPerson] == 0){
+                            console.log(pPerson + " pays " + oPerson + " $" + personOwed[oPerson]);
+                            if(pPerson in owedPayments){
+                                owedPayments[pPerson] = owedPayments[pPerson].concat("; pays " + oPerson + " $" + personOwed[oPerson])
+                            }
+                            else{
+                                owedPayments[pPerson] = "pays " + oPerson + " $" + personOwed[oPerson];
+                            }
+                            personOwed[oPerson] = 0;
+                        }
+                        else {
+                            let difference = personOwed[oPerson]
+                            console.log(pPerson + "pays " + oPerson + " $" + difference + " but still owes " + personOwed[pPerson])
+                            if(pPerson in owedPayments){
+                                owedPayments[pPerson] = owedPayments[pPerson].concat("; pays " + oPerson + " $" + difference)
+                            }
+                            else{
+                                owedPayments[pPerson] = "pays " + oPerson + " $" + difference + " but still owes " + personOwed[pPerson]
+                            }
+                            owedPayments[pPerson]
+                            personOwed[oPerson] = 0;
+                        }
+                    }
+                }
+            }
+        }
+        else{
+            console.log(oPerson)
+        }
+    }
+    console.log(owedPayments)
+    var table = document.getElementById("budget-repayments");
+    $("#budget-repayments tbody tr").remove();
+
+    if (!jQuery.isEmptyObject(owedPayments)){
+        var headerRow = table.insertRow(-1);
+        var hcell0 = document.createElement("TH");
+        hcell0.innerHTML = "Person";
+        headerRow.appendChild(hcell0)
+        var hcell1 = document.createElement("TH");
+        hcell1.innerHTML = "Repayment details";        
+        headerRow.appendChild(hcell1)
+    }
+    for (item in owedPayments) {
+        var row = table.insertRow();
+        var cell0 = row.insertCell(0);
+        var cell1 = row.insertCell(1);
+        cell0.innerHTML = item;
+        cell1.innerHTML = owedPayments[item];
+    }
 }
 
 $('#budgetModal').on('hidden.bs.modal', function (e) {
@@ -283,7 +385,6 @@ ws.onmessage = function(serverData){
         budgetItems = data['data'];
         loadBudget();
         if(budgetItems.length == 0){
-            calculateBudget();
             if (isSwitched) handleSwitch();
             render();
         }
@@ -291,4 +392,5 @@ ws.onmessage = function(serverData){
     else{
         console.log(data)
     }
+    calculateBudget();
 }
