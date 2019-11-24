@@ -18,7 +18,7 @@ threading.Thread(target=app.run).start()
 
 USERS = set()
 budgetItems = []
-events = [[] for i in range(7)]
+events = []
 userList = []
 
 
