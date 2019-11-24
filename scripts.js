@@ -79,7 +79,11 @@ function saveInputParams(n, start, end) {
     }
     if (setPerson) {
         people.push({name: n, aStart: start, aEnd: end});
+        ws.send(people)
     }
+
+    // ws.send(JSON.stringify({'type': 'userList', 'data': people}))
+    console.log(people)
 }
 
 function leaveInput(e) {
@@ -222,22 +226,23 @@ function calculateBudget(){
 }
 
 function splitCosts(){
-    let people = [];
-    for(i in budgetItems){
-        people.push(budgetItems[i]['person']);
-    }
-    people = Array.from(new Set(people));
+    console.log(people)
+    // let people = [];
+    // for(i in budgetItems){
+    //     people.push(budgetItems[i]['person']);
+    // }
+    // people = Array.from(new Set(people));
     let personPaid = {};
     let personOwed = {};
     let owedPayments = {};
     for(j in people){
         let totalPaid = 0;
         for(k in budgetItems){
-            if(budgetItems[k]['person'] == people[j]){
+            if(budgetItems[k]['person'] == people[j]['name']){
                 totalPaid += parseInt(budgetItems[k]['cost']);
             }
         }
-        personPaid[people[j]] = totalPaid
+        personPaid[people[j]['name']] = totalPaid
     }
     let numberPeople = people.length;
     perPersonCost = totalCost / numberPeople
@@ -420,14 +425,17 @@ ws.onmessage = function(serverData){
     }
     else if(data['type'] == 'budget'){
         budgetItems = data['data'];
-        loadBudget();
         if(budgetItems.length == 0){
             if (isSwitched) handleSwitch();
             render();
         }
     }
+    else if(data['type'] == 'userList'){
+        people = data['data'];
+    }
     else{
         console.log(data)
     }
+    loadBudget();
     calculateBudget();
 }
