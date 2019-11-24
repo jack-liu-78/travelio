@@ -82,8 +82,8 @@ function saveInputParams(n, start, end) {
         people.push({name: n, aStart: start, aEnd: end});
         local_name = n;
         var tempPeople = people
-        tempPeople[0].aStart = moment(tempPeople[0].aStart).format('YYYY-MM-DD')
-        tempPeople[0].aEnd = moment(tempPeople[0].aEnd).format('YYYY-MM-DD')
+        tempPeople[0].aStart = moment(tempPeople[0].aStart).format('YYYY-MM-DD,HH:mm:ss.sssZZ')
+        tempPeople[0].aEnd = moment(tempPeople[0].aEnd).format('YYYY-MM-DD,HH:mm:ss.sssZZ')
         ws.send(JSON.stringify({'type': 'userList', 'data': tempPeople}))
         console.log(tempPeople)
     }
@@ -478,9 +478,9 @@ ws.onmessage = function(serverData){
     else if(data['type'] == 'userList'){
         people = data['data'];
         for(i in people){
-            people[i]['aStart'] = moment(people[i]['aStart'], 'YYYY-MM-DD');
-            console.log(moment(people[i]['aStart'], 'YYYY-MM-DD'))
-            people[i]['aEnd'] = moment(people[i]['aEnd'], 'YYYY-MM-DD');
+            people[i]['aStart'] = moment(people[i]['aStart'], 'YYYY-MM-DD,HH:mm:ss.sssZZ');
+            console.log(moment(people[i]['aStart'], 'YYYY-MM-DD,HH:mm:ss.sssZZ'))
+            people[i]['aEnd'] = moment(people[i]['aEnd'], 'YYYY-MM-DD,HH:mm:ss.sssZZ');
         }
         console.log(people)
         calcAvailability();

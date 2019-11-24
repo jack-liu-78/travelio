@@ -6,7 +6,7 @@ import json
 
 USERS = set()
 budgetItems = []
-events = [[] for i in range(7)]
+events = []
 userList = []
 
 
