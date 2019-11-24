@@ -22,6 +22,10 @@ async def update_users():
     for user in USERS:
         await send_data(user, json.dumps({'type': 'event', 'data': events}))
         await send_data(user, json.dumps({'type': 'budget', 'data': budgetItems}))
+
+async def update_user_list():
+    global userList
+    for user in USERS:
         await send_data(user, json.dumps({'type': 'userList', 'data': userList}))
 
 async def send_data(user, data):
@@ -30,6 +34,7 @@ async def send_data(user, data):
 async def time(websocket, path):
     global budgetItems
     global events
+    global userList
     try:
         if websocket not in USERS:
             await register(websocket)
@@ -40,22 +45,29 @@ async def time(websocket, path):
             # await notify_users()
         async for message in websocket:
             data = json.loads(message)
-            print(data)
             if(data['type'] == 'budget'):
                 budgetItems.append({'person': data['person'], 'name': data['name'], 'cost': data['cost']})
+                await update_users()
                 # await websocket.send(json.dumps({'type': 'budget', 'data': budgetItems}))
             elif(data['type'] == 'event'):
                 events[data['day']].append({'name': data['name'], 'cost': data['cost']})
+                await update_users()
                 # await websocket.send(json.dumps({'type': 'event', 'data': events}))
             # test = await websocket.send(data)
             # print(test)
             elif(data['type'] == 'reset'):
                 budgetItems = []
                 events = [[] for i in range(7)]
+                userList = []
+                await update_users()
+                await update_user_list()
             elif(data['type'] == 'userList'):
-                # print(userList)
                 userList.append(data['data'][0])
-            await update_users()
+                print(userList)
+                await update_user_list()
+            elif(data['type'] == 'eventsArr'):
+                events = data['data']
+                await update_users()
     finally:
         print('no connection')
         await unregister(websocket)

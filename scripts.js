@@ -61,10 +61,10 @@ $(function() {
     }, function(start, end, label) {
         let n = document.getElementById('inputFieldName').value;
         let e = moment(end);
-        e.hour(0);
-        e.minute(0);
-        e.second(0);
-        e.millisecond(0);
+        // e.hour(0);
+        // e.minute(0);
+        // e.second(0);
+        // e.millisecond(0);
         saveInputParams(n, start, e);
     });
 });
@@ -80,15 +80,18 @@ function saveInputParams(n, start, end) {
     }
     if (setPerson) {
         people.push({name: n, aStart: start, aEnd: end});
-        local_name = n
-        // ws.send(people)
+        local_name = n;
+        var tempPeople = people
+        tempPeople[0].aStart = moment(tempPeople[0].aStart).format('YYYY-MM-DD')
+        tempPeople[0].aEnd = moment(tempPeople[0].aEnd).format('YYYY-MM-DD')
+        ws.send(JSON.stringify({'type': 'userList', 'data': tempPeople}))
+        console.log(tempPeople)
     }
-
-    // ws.send(JSON.stringify({'type': 'userList', 'data': people}))
     console.log(people)
 }
 
 function calcAvailability() {
+    console.log(people)
     let startDates = [];
     let endDates = [];
     for (let i = 0; i < people.length; i++) {
@@ -102,6 +105,7 @@ function calcAvailability() {
     for (let i = 0; i < tripLength; i++) {
         events.push([]);
     }
+    ws.send(JSON.stringify({'type': 'eventsArr', 'data': events}))
 }
 
 function leaveInput(e) {
@@ -458,6 +462,8 @@ ws.onmessage = function(serverData){
     if(data['type'] == 'event'){
         events = data['data'];
         loadEvents();
+        loadBudget();
+        calculateBudget();
     }
     else if(data['type'] == 'budget'){
         budgetItems = data['data'];
@@ -465,13 +471,23 @@ ws.onmessage = function(serverData){
             if (isSwitched) handleSwitch();
             render();
         }
+        loadEvents();
+        loadBudget();
+        calculateBudget();
     }
     else if(data['type'] == 'userList'){
         people = data['data'];
+        for(i in people){
+            people[i]['aStart'] = moment(people[i]['aStart'], 'YYYY-MM-DD');
+            console.log(moment(people[i]['aStart'], 'YYYY-MM-DD'))
+            people[i]['aEnd'] = moment(people[i]['aEnd'], 'YYYY-MM-DD');
+        }
+        console.log(people)
+        calcAvailability();
+        loadPeople();
+        // loadDays();
     }
     else{
         console.log(data)
     }
-    loadBudget();
-    calculateBudget();
 }
