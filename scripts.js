@@ -79,7 +79,7 @@ function saveInputParams(n, start, end) {
     }
     if (setPerson) {
         people.push({name: n, aStart: start, aEnd: end});
-        ws.send(people)
+        // ws.send(people)
     }
 
     // ws.send(JSON.stringify({'type': 'userList', 'data': people}))
