@@ -7,6 +7,7 @@ import json
 USERS = set()
 budgetItems = []
 events = [[] for i in range(7)]
+userList = []
 
 
 async def register(websocket):
@@ -21,11 +22,10 @@ async def update_users():
     for user in USERS:
         await send_data(user, json.dumps({'type': 'event', 'data': events}))
         await send_data(user, json.dumps({'type': 'budget', 'data': budgetItems}))
+        await send_data(user, json.dumps({'type': 'userList', 'data': userList}))
 
 async def send_data(user, data):
     await user.send(data)
-    await user.send(data)
-    print('sent', user)
 
 async def time(websocket, path):
     global budgetItems
@@ -38,23 +38,23 @@ async def time(websocket, path):
             # await websocket.send(now)
             # await websocket.send(json.dumps(str(counter)))
             # await notify_users()
-            print(USERS)
         async for message in websocket:
             data = json.loads(message)
             print(data)
             if(data['type'] == 'budget'):
                 budgetItems.append({'person': data['person'], 'name': data['name'], 'cost': data['cost']})
                 # await websocket.send(json.dumps({'type': 'budget', 'data': budgetItems}))
-                print(budgetItems)
             elif(data['type'] == 'event'):
                 events[data['day']].append({'name': data['name'], 'cost': data['cost']})
                 # await websocket.send(json.dumps({'type': 'event', 'data': events}))
-                print(events)
             # test = await websocket.send(data)
             # print(test)
             elif(data['type'] == 'reset'):
                 budgetItems = []
                 events = [[] for i in range(7)]
+            elif(data['type'] == 'userList'):
+                # print(userList)
+                userList.append(data['data'][0])
             await update_users()
     finally:
         print('no connection')
