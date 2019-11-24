@@ -56,7 +56,7 @@ let createWs = () => {
     var scheme = window.location.protocol == "https:" ? 'wss://' : 'ws://';
     var webSocketUri =  scheme
                         + window.location.hostname
-                        + ":8080";
+                        + (location.port ? ':'+location.port: '');
     return new WebSocket(webSocketUri);
 }
 
