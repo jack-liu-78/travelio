@@ -8,32 +8,16 @@ var weekdays = [
     "Saturday"
 ];
 /*
-1. landing page
-2. pick dates with popup
-3. generate events array with just that many days
-4. let the week frame be scrollable only within that time period
 5. send link to other people
 6. those people pick dates as well
-7. only show a date range that fits what everyone picks
-
-- store the latest starting date and earliest ending date as the limits of the trip
-- events can be indexed based on [0] to [length - 1], then add an offset when calculating the days to show
-    - offset is the earliest starting date
-
-- in event creation dialogue, only allow a choice within the date range? or just pick within for the demo
 */
 
 /*
-    - figure out availbility
-        - display available days
-    - format budget as a table
     - split costs functionality
     - move buttons at bottom to somewhere else
-    - 'add to budget' popup ui
     - 'add event' popup ui
         - travel
         - accomodations
-        - restaurants
         - custom
     - hosting (GCP)
         - integrating websockets
@@ -54,6 +38,9 @@ var destination = "";
 
 var totalCost = 0;
 
+var nextEventDay = 0;
+function setNextEventDay(i) { nextEventDay = i; }
+
 var ws = new WebSocket("ws://127.0.0.1:1112")
 
 function leaveLanding(e) {
@@ -72,8 +59,12 @@ $(function() {
         opens: 'left'
     }, function(start, end, label) {
         let n = document.getElementById('inputFieldName').value;
-        saveInputParams(n, start, end);
-        console.log("A new date selection was made: " + start.format('YYYY-MM-DD') + ' to ' + end.format('YYYY-MM-DD'));
+        let e = moment(end);
+        e.hour(0);
+        e.minute(0);
+        e.second(0);
+        e.millisecond(0);
+        saveInputParams(n, start, e);
     });
 });
 
@@ -131,18 +122,33 @@ function loadPeople() {
 function loadDays() {
     let tripLength = moment.duration(endDate.diff(startDate)).days();
     for (let i = 0; i < weekdays.length && i < tripLength; i++) {
+        let iDate = moment(startDate);
+        iDate = iDate.add(i, 'days').add(dayDisplayOffset, 'days');
         document.getElementById("week-day-name-" + i.toString()).innerHTML = 
-            startDate.add(i, 'days').add(dayDisplayOffset, 'days').format("ddd, MMM Do YYYY");
+            iDate.format("ddd, MMM Do YYYY");
+        let withinTrip = true;
+        let distStart = moment.duration(iDate.diff(startDate)).days();
+        if (distStart < 0) withinTrip = false;
+        let distEnd = moment.duration(iDate.diff(endDate)).days();
+        if (distEnd > 0) withinTrip = false;
+        if (withinTrip) {
+            document.getElementById("week-day-pane-" + i.toString()).style.backgroundColor = '#bbdfbd';
+            document.querySelector("#week-day-pane-" + i.toString() + " > div.event-add-button-wrap").style.display = 'initial';
+        } else {
+            document.getElementById("week-day-pane-" + i.toString()).style.backgroundColor = null;
+            document.querySelector("#week-day-pane-" + i.toString() + " > div.event-add-button-wrap").style.display = 'none';
+        }
     }
 }
 
 function changeDayDisplayOffset(direction) {
     if (direction == "left") {
-        dayDisplayOffset -= 7;
+        dayDisplayOffset -= 1;
     } else {
-        dayDisplayOffset += 7;
+        dayDisplayOffset += 1;
     }
     loadDays();
+    loadEvents();
 }
 
 function render() {
@@ -317,40 +323,71 @@ function splitCosts(){
 }
 
 $('#budgetModal').on('hidden.bs.modal', function (e) {
-    $(this)
-      .find("input,textarea")
-         .val('')
-         .end();
+$(this)
+    .find("input,textarea")
+        .val('')
+            .end();
+});
+
+var test_img = "http://r-ec.bstatic.com/xdata/images/hotel/square60/148085655.jpg?k=34e17d7d883196094efe05d1d73f8a60c5d6fee9c64ac2fba1987475d038631f&o="
+var test_name = 'hi'
+$('#travelModal').on('shown.bs.modal', function (e) {
+    
+    //make call to get the flight data from the backend
+    flights
+
+    var hotel_img = '<img src=' + test_img + '>';
+    var name = '<p>'+ test_name +'</p>';
+    var price = '<p>' + '266$' +'</p>';
+    var flight_info = '<div class=flightContainer onClick=addFlight()>' + hotel_img + name + price + '</div>'
+
+    var content = $(this).find('.container-fluid');
+    content.append(flight_info);
+    content.append(flight_info);
   })
+
+
+  function addFlight(){
+      
+      // addEvent(flight start_day)
+      // addEvent(flight end_day)
+    
+}
 
 function loadEvents() {
     for (let i = 0; i < 7; i++) {
         document.getElementById(`week-${i}-events`).innerHTML = "";
     }
     for (let i = 0; i < 7; i++) {
-        for (let j = 0; j < events[i].length; j++) {
+        let iDate = moment(startDate);
+        iDate = iDate.add(i, 'days').add(dayDisplayOffset, 'days');
+        let index = moment.duration(iDate.diff(startDate)).days();
+        let tripLength = moment.duration(endDate.diff(startDate)).days();
+        if (index < 0 || index >= tripLength) {
+            continue;
+        }
+        for (let j = 0; j < events[index].length; j++) {
             document.getElementById(`week-${i}-events`).innerHTML +=
             `<div class="event">
-                <div class="event-title">${events[i][j].name}</div>
-                <div class="event-cost">${events[i][j].cost}</div>
+                <div class="event-title">${events[index][j].name}</div>
+                <div class="event-cost">${events[index][j].cost}</div>
             </div>`;
         }
     }
 }
 
-function addEvent(name, cost, day) {
-    console.log(events);
-    let person = 'eventPers'
-    let c = cost;
-    let d = day;
-    if (name == "random") {
-        c = Math.floor(Math.random() * 200 + 100);
-        d = Math.floor(Math.random() * 7);
-    ws.send(JSON.stringify({type:'event', name: name, cost: c, day: d}))
-    }
+function addEvent(eventPerson, eventItem, eventCost) {
+    let i = nextEventDay;
+    let iDate = moment(startDate);
+    iDate = iDate.add(i, 'days').add(dayDisplayOffset, 'days');
+    let index = moment.duration(iDate.diff(startDate)).days();
+    let person = eventPerson;
+    let name = eventItem;
+    let c = eventCost;
+    ws.send(JSON.stringify({type:'event', name: name, cost: c, day: index}));
     addBudgetItem(person, name, c);
-    events[d].push({person: person, name: name, cost: c});
-    document.getElementById(`week-${d}-events`).innerHTML +=
+    events[index].push({person: person, name: name, cost: c});
+    document.getElementById(`week-${i}-events`).innerHTML +=
     `<div class="event">
         <div class="event-title">${name}</div>
         <div class="event-cost">$${c}</div>

@@ -29,7 +29,7 @@
       <h5 class="mt-5">What's your name?</h5>
       <input class="inputFields" type="text" id="inputFieldName" name="name" placeholder="Your name..">
       <h5 class="mt-1">When are you available?</h5>
-      <input class="inputFields" type="text" name="daterange" value="01/01/2018 - 01/15/2018" />
+      <input class="inputFields" type="text" name="daterange" value="11/23/2019 - 12/8/2019" />
       <br></br>
       <button class="btn btn-success submit-button" type="submit">Go</button>
     </form>
@@ -74,32 +74,53 @@
         <button class="btn btn-primary" onclick="changeDayDisplayOffset('right')">&gt;</button>
       </div>
       <div id="days-container">
-        <div class="week-day">
+        <div class="week-day" id="week-day-pane-0">
           <div class="day-name" id="week-day-name-0"></div>
+          <div class="event-add-button-wrap">
+            <button class="btn btn-success event-add-button" data-toggle="modal" data-target="#eventModal" onclick="setNextEventDay(0)">+</button>
+          </div>
           <div class="events-pane" id="week-0-events"></div>
         </div>
-        <div class="week-day">
+        <div class="week-day" id="week-day-pane-1">
           <div class="day-name" id="week-day-name-1"></div>
+          <div class="event-add-button-wrap">
+            <button class="btn btn-success event-add-button" data-toggle="modal" data-target="#eventModal" onclick="setNextEventDay(1)">+</button>
+          </div>
           <div class="events-pane" id="week-1-events"></div>
         </div>
-        <div class="week-day">
+        <div class="week-day" id="week-day-pane-2">
           <div class="day-name" id="week-day-name-2"></div>
+          <div class="event-add-button-wrap">
+            <button class="btn btn-success event-add-button" data-toggle="modal" data-target="#eventModal" onclick="setNextEventDay(2)">+</button>
+          </div>
           <div class="events-pane" id="week-2-events"></div>
         </div>
-        <div class="week-day">
+        <div class="week-day" id="week-day-pane-3">
           <div class="day-name" id="week-day-name-3"></div>
+          <div class="event-add-button-wrap">
+            <button class="btn btn-success event-add-button" data-toggle="modal" data-target="#eventModal" onclick="setNextEventDay(3)">+</button>
+          </div>
           <div class="events-pane" id="week-3-events"></div>
         </div>
-        <div class="week-day">
+        <div class="week-day" id="week-day-pane-4">
           <div class="day-name" id="week-day-name-4"></div>
+          <div class="event-add-button-wrap">
+            <button class="btn btn-success event-add-button" data-toggle="modal" data-target="#eventModal" onclick="setNextEventDay(4)">+</button>
+          </div>
           <div class="events-pane" id="week-4-events"></div>
         </div>
-        <div class="week-day">
+        <div class="week-day" id="week-day-pane-5">
           <div class="day-name" id="week-day-name-5"></div>
+          <div class="event-add-button-wrap">
+            <button class="btn btn-success event-add-button" data-toggle="modal" data-target="#eventModal" onclick="setNextEventDay(5)">+</button>
+          </div>
           <div class="events-pane" id="week-5-events"></div>
         </div>
-        <div class="week-day">
+        <div class="week-day" id="week-day-pane-6">
           <div class="day-name" id="week-day-name-6"></div>
+          <div class="event-add-button-wrap">
+            <button class="btn btn-success event-add-button" data-toggle="modal" data-target="#eventModal" onclick="setNextEventDay(6)">+</button>
+          </div>
           <div class="events-pane" id="week-6-events"></div>
         </div>
       </div>
@@ -126,9 +147,42 @@
   <div class="container" style="margin-top: 5px">
     <button type="button" class="btn btn-primary" onclick="handleSwitch()">Toggle Budget</button>
     <button type="button" class="btn btn-danger" onclick="resetAll()">Reset</button>
-    <!-- <button type="button" class="btn btn-success" onclick="addBudgetItem('test', 100)">Add to budget</button> -->
     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#budgetModal">Add to budget</button>
-    <button type="button" class="btn btn-warning" onclick="addEvent('random')">Add random event</button>
+  </div>
+
+  <!-- Event Modal -->
+  <div class="modal fade" id="eventModal" tabindex="-1" role="dialog" aria-labelledby="eventModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="eventModalLabel">What're you planning?</h5>
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+          </button>
+        </div>
+        <div class="modal-body">
+          <form id='eventModalForm'>
+            <div class="form-group">
+              <label>Who paid?</label>
+              <input type="text" class="form-control" id="eventPerson" placeholder="ex.">
+            </div>
+            <div class="form-group">
+              <label>What did you do?</label>
+              <input type="text" class="form-control" id="eventItem" placeholder="ex.">
+            </div>
+            <div class="form-group">
+              <label>Cost $:</label>
+              <input type="text" class="form-control" id="eventCost" placeholder="$$">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+          <button type="button" class="btb btn-info" data-toggle="modal" data-target="#travelModal">Flight Options</button>
+          <button type="button" class="btn btn-primary" onclick="addEvent(eventPerson.value, eventItem.value, eventCost.value)" data-dismiss="modal">Add!</button>
+        </div>
+      </div>
+    </div>
   </div>
 
   <!-- Budget Modal -->
@@ -164,6 +218,27 @@
       </div>
     </div>
   </div>
+
+<!--Flight/Travel Modal-->
+<div class="modal fade" id="travelModal" tabindex="-1" role="dialog" aria-labelledby="travelModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="travelModalLabel">Pick a flight!</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        <div class="container-fluid" id="directory">
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer">
+      </div>
+    </div>
+  </div>
+</div>
 
   <!-- Bootstrap core JavaScript -->
   <script src="vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
