@@ -377,13 +377,13 @@ $('#travelModal').on('shown.bs.modal', function (e) {
     //make call to get the flight data from the backend
     getBackendFlights();
     let content = $(this).find('.container-fluid');
-
+    content.text("")
     for (i = 0; i < gottenFlights.length; i++) {
         let curr_info = gottenFlights[i];
         let flight_name = curr_info['AirLine'];
         let name = '<h1>'+ flight_name +'</h1>';
         let flight_price = curr_info['Price']
-        let price = '<p>' + String(flight_price)  +'$</p>';
+        let price = '<p>$' + String(flight_price)  +'</p>';
         let flight_info = `<div class=flightContainer  data-dismiss="modal" onclick='addFlight("${local_name}","${flight_name}","${flight_price/2}")'>` + name + price + `</div>`;
         content.append(flight_info);
     }
@@ -412,6 +412,7 @@ $('#accomodationsModal').on('shown.bs.modal', function (e) {
     getBackendHotels();
 
     let content = $(this).find('.container-fluid');
+    content.text("")
 
     for (i = 0; i < gottenHotels.length; i++) {
         let curr_info = gottenHotels[i];
