@@ -17,7 +17,8 @@ def index():
 
 @app.route("/setDestination", methods = ['POST'])
 def setDestination():
-    destination = request.form['destination']
+    global destination
+    destination = request.form['destination'].lower().capitalize()
     print(destination)
     return 'OK'
 

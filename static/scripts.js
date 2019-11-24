@@ -198,6 +198,15 @@ function resetAll() {
     calculateBudget();
     if (isSwitched) handleSwitch();
     ws.send(JSON.stringify({type: 'reset'}));
+    $.post({
+        url: "/setDestination",
+        data: {
+            'destination': ''
+        },
+        success: (e) =>{
+            console.log(e)
+        }
+    })
     render();
 }
 
