@@ -19,7 +19,6 @@ def get_flights(depart_date, return_date, depart_loc, destination):
     destination_dict = json.loads(data1)
 
     destination = destination_dict['Places'][0]['PlaceId']
-    print(destination)
 
     depart_date = depart_date
 

@@ -37,6 +37,7 @@ def flights():
         'destination': request.form['destination']
     }
     ret = get_flights(data['depart'], data['return'], data['startPoint'], data['destination'])
+    print(ret)
     return jsonify(ret)
 
 USERS = set()
