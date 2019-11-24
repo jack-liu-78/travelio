@@ -123,8 +123,8 @@ function calcAvailability() {
     let startDates = [];
     let endDates = [];
     for (let i = 0; i < people.length; i++) {
-        startDates.push(people[i].aStart);
-        endDates.push(people[i].aEnd);
+        startDates.push(moment(people[i].aStart, 'YYYY-MM-DD,HH:mm:ss.sssZZ'));
+        endDates.push(moment(people[i].aEnd, 'YYYY-MM-DD,HH:mm:ss.sssZZ'));
     }
     startDate = moment.max(startDates);
     endDate = moment.min(endDates);
@@ -153,8 +153,8 @@ function loadPeople() {
             <div class="person-info">
                 <div class="person-info-title">${p.name}</div>
                 Availability
-                <div class="person-info-time">Start: ${p.aStart.format('MM-DD-YYYY')}</div>
-                <div class="person-info-time">End: ${p.aEnd.format('MM-DD-YYYY')}</div>
+                <div class="person-info-time">Start: ${moment(p.aStart).format('MM-DD-YYYY')}</div>
+                <div class="person-info-time">End: ${moment(p.aEnd).format('MM-DD-YYYY')}</div>
             </div>
         </li>`;
     }
