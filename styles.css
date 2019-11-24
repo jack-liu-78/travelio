@@ -214,15 +214,6 @@ table, th, td {
     text-align: center;
 }
 
-.flightContainer img {
-    width: 250px;
-    height: 200px;
-    overflow: hidden;
-    padding: 2px;
-    margin: 2px;
-    object-fit: cover;
-}
-
 .flightContainer p {
     font-family: Arial, Helvetica, sans-serif;
     font-size: 15px;
