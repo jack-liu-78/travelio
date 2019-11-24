@@ -38,6 +38,9 @@ var destination = "";
 
 var totalCost = 0;
 
+var gottenHotels;
+var gottenFlights;
+
 var nextEventDay = 0;
 var local_name = '';
 function setNextEventDay(i) { nextEventDay = i; }
@@ -381,12 +384,12 @@ $('#accomodationsModal').on('shown.bs.modal', function (e) {
     
     //make call to get the accomodation data from backend
     //make sure to clear the the content variable before starting to append new content
-
-    var photo = '<img src='+ test_img +'>'
-    var name = '<h1>'+ test_hotel +'</h1>';
-    var price = '<p>' + String(hotel_price) +'$</p>';
-    var titles = '<div class="titles">' + name + price + '</div>'
-    var hotel_info = `<div class=accomodationsContainer data-dismiss="modal" onclick='addAccomodation("${local_name}","${test_hotel}","${hotel_price}")'>` + photo + titles + `</div>`;
+    let info = getBackendHotels();
+    let photo = '<img src='+ test_img +'>'
+    let name = '<h1>'+ test_hotel +'</h1>';
+    let price = '<p>' + String(hotel_price) +'$</p>';
+    let titles = '<div class="titles">' + name + price + '</div>'
+    let hotel_info = `<div class=accomodationsContainer data-dismiss="modal" onclick='addAccomodation("${local_name}","${test_hotel}","${hotel_price}")'>` + photo + titles + `</div>`;
     console.log(hotel_info);
     var content = $(this).find('.container-fluid');
     content.append(hotel_info);
@@ -490,6 +493,32 @@ ws.onmessage = function(serverData){
     }
 }
 
-function testBackend() {
-    
+function getBackendFlights() {
+    $.post({
+        url: "/flights",
+        data: {
+            depart: startDate.format('YYYY-MM-DD'),
+            return: endDate.format('YYYY-MM-DD'),
+            startPoint: "YYZ",
+            destination: destination
+        },
+        success: (e) => {
+            gottenFlights = e;
+        }
+    })
+}
+
+function getBackendHotels() {
+    $.post({
+        url: "/acco",
+        data: {
+            city: destination,
+            checkin: startDate.format('YYYY-MM-DD'),
+            checkout: endDate.format('YYYY-MM-DD'),
+            numPeople: people.length
+        },
+        success: (e) => {
+            gottenHotels = e;
+        }
+    })
 }
