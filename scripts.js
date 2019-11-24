@@ -82,9 +82,7 @@ function saveInputParams(n, start, end) {
     }
 }
 
-function leaveInput(e) {
-    e.preventDefault();
-    $('#input-page').fadeOut(400);
+function calcAvailability() {
     let startDates = [];
     let endDates = [];
     for (let i = 0; i < people.length; i++) {
@@ -98,7 +96,12 @@ function leaveInput(e) {
     for (let i = 0; i < tripLength; i++) {
         events.push([]);
     }
+}
 
+function leaveInput(e) {
+    e.preventDefault();
+    $('#input-page').fadeOut(400);
+    calcAvailability();
     loadDays();
     loadPeople();
 }
