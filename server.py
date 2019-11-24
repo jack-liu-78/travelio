@@ -40,6 +40,10 @@ async def update_user_list():
     for user in USERS:
         await send_data(user, json.dumps({'type': 'userList', 'data': userList}))
 
+async def reset_users():
+    for user in USERS:
+        await send_data(user, json.dumps({'type': 'reset'}))
+
 async def send_data(user, data):
     await user.send(data)
 
@@ -70,10 +74,11 @@ async def time(websocket, path):
             # print(test)
             elif(data['type'] == 'reset'):
                 budgetItems = []
-                events = [[] for i in range(7)]
+                events = []
                 userList = []
-                await update_users()
-                await update_user_list()
+                # await update_users()
+                # await update_user_list()
+                await reset_users()
             elif(data['type'] == 'userList'):
                 userList.append(data['data'][-1])
                 # print(userList)
