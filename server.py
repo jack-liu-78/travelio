@@ -9,9 +9,18 @@ from flights_accomodations import get_flights, get_accomodations
 
 app = Flask(__name__)
 
+destination = ''
+
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", destination = destination)
+
+@app.route("/setDestination", methods = ['POST'])
+def setDestination():
+    global destination
+    destination = request.form['destination'].lower().capitalize()
+    print(destination)
+    return 'OK'
 
 threading.Thread(target=app.run).start()
 
