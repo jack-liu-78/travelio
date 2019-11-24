@@ -52,7 +52,15 @@ x();
 
 function setNextEventDay(i) { nextEventDay = i; }
 
-var ws = new WebSocket("ws://127.0.0.1:1112")
+let createWs = () => {
+    var scheme = window.location.protocol == "https:" ? 'wss://' : 'ws://';
+    var webSocketUri =  scheme
+                        + window.location.hostname
+                        + ":8080";
+    return new WebSocket(webSocketUri);
+}
+
+var ws = createWs();
 
 function leaveLanding(e) {
     e.preventDefault();
