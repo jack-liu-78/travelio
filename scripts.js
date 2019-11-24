@@ -344,13 +344,13 @@ $(this)
 });
 
 var test_name = 'WestJet'
-var test_price = 266
+var test_price = 266.0
 $('#travelModal').on('shown.bs.modal', function (e) {
     
     //make call to get the flight data from the backend
 
     var name = '<h1>'+ test_name +'</h1>';
-    var price = '<p>' + String(test_price) +'</p>';
+    var price = '<p>' + String(test_price)  +'$</p>';
     //var flight_info = '<div class=flightContainer onclick=`addFlight(' + '"' + local_name + '"' + ', '+ '"'+ test_name + '"' + ', ' + '"' + String(price/2)  + '"' + ')`>' + name + price + '</div>'
     var flight_info = `<div class=flightContainer  data-dismiss="modal" onclick='addFlight("${local_name}","${test_name}","${test_price/2}")'>` + name + price + `</div>`;
     console.log(flight_info);
@@ -386,7 +386,7 @@ $('#accomodationsModal').on('shown.bs.modal', function (e) {
 
     var photo = '<img src='+ test_img +'>'
     var name = '<h1>'+ test_hotel +'</h1>';
-    var price = '<p>' + String(hotel_price) +'</p>';
+    var price = '<p>' + String(hotel_price) +'$</p>';
     var titles = '<div class="titles">' + name + price + '</div>'
     var hotel_info = `<div class=accomodationsContainer data-dismiss="modal" onclick='addAccomodation("${local_name}","${test_hotel}","${hotel_price}")'>` + photo + titles + `</div>`;
     console.log(hotel_info);
