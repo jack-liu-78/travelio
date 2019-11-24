@@ -172,3 +172,35 @@ table, th, td {
     padding: 10px;
     background: lightgray;
 }
+
+#directory {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    overflow: scroll;
+}
+
+.flightContainer{
+    width: 400px;
+    height: 300px;
+    background-color: #da7070;
+    margin: 5px;
+    padding: 2px;
+    justify-content: center;
+    text-align: center;
+}
+
+.flightContainer img {
+    width: 250px;
+    height: 200px;
+    overflow: hidden;
+    padding: 2px;
+    margin: 2px;
+    object-fit: cover;
+}
+
+.flightContainer p {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    padding: 5px;
+}

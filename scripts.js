@@ -227,6 +227,31 @@ $(this)
             .end();
 });
 
+var test_img = "http://r-ec.bstatic.com/xdata/images/hotel/square60/148085655.jpg?k=34e17d7d883196094efe05d1d73f8a60c5d6fee9c64ac2fba1987475d038631f&o="
+var test_name = 'hi'
+$('#travelModal').on('shown.bs.modal', function (e) {
+    
+    //make call to get the flight data from the backend
+    flights
+
+    var hotel_img = '<img src=' + test_img + '>';
+    var name = '<p>'+ test_name +'</p>';
+    var price = '<p>' + '266$' +'</p>';
+    var flight_info = '<div class=flightContainer onClick=addFlight()>' + hotel_img + name + price + '</div>'
+
+    var content = $(this).find('.container-fluid');
+    content.append(flight_info);
+    content.append(flight_info);
+  })
+
+
+  function addFlight(){
+      
+      // addEvent(flight start_day)
+      // addEvent(flight end_day)
+    
+}
+
 function loadEvents() {
     for (let i = 0; i < 7; i++) {
         document.getElementById(`week-${i}-events`).innerHTML = "";
