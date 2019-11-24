@@ -53,6 +53,7 @@ x();
 function setNextEventDay(i) { nextEventDay = i; }
 
 var ws = new WebSocket("ws://127.0.0.1:1112")
+//var ws = new WebSocket("wss://rare-cat-60.localtunnel.me")
 
 function leaveLanding(e) {
     e.preventDefault();
