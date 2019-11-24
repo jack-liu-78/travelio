@@ -63,6 +63,10 @@ async def update_user_list():
     for user in USERS:
         await send_data(user, json.dumps({'type': 'userList', 'data': userList}))
 
+async def reset_users():
+    for user in USERS:
+        await send_data(user, json.dumps({'type': 'reset'}))
+
 async def send_data(user, data):
     await user.send(data)
 
@@ -80,6 +84,7 @@ async def time(websocket, path):
             # await notify_users()
         async for message in websocket:
             data = json.loads(message)
+            print(data)
             if(data['type'] == 'budget'):
                 budgetItems.append({'person': data['person'], 'name': data['name'], 'cost': data['cost']})
                 await update_users()
@@ -92,13 +97,14 @@ async def time(websocket, path):
             # print(test)
             elif(data['type'] == 'reset'):
                 budgetItems = []
-                events = [[] for i in range(7)]
+                events = []
                 userList = []
-                await update_users()
-                await update_user_list()
+                # await update_users()
+                # await update_user_list()
+                await reset_users()
             elif(data['type'] == 'userList'):
-                userList.append(data['data'][0])
-                print(userList)
+                userList.append(data['data'][-1])
+                # print(userList)
                 await update_user_list()
             elif(data['type'] == 'eventsArr'):
                 events = data['data']

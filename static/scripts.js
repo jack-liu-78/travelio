@@ -281,19 +281,19 @@ function splitCosts(){
                             personOwed[oPerson] = -difference
                             console.log(pPerson + " pays " + oPerson + " $" + paidDifference )
                             if(pPerson in owedPayments){
-                                owedPayments[pPerson] = owedPayments[pPerson].concat("; pays " + oPerson + " $" + paidDifference)
+                                owedPayments[pPerson] = owedPayments[pPerson].concat("; " + oPerson + " $" + paidDifference)
                             }
                             else{
-                                owedPayments[pPerson] = "pays " + oPerson + " $" + paidDifference;
+                                owedPayments[pPerson] = "you need to pay " + oPerson + " $" + paidDifference;
                             }
                         }
                         else if(personOwed[pPerson] == 0){
                             console.log(pPerson + " pays " + oPerson + " $" + personOwed[oPerson]);
                             if(pPerson in owedPayments){
-                                owedPayments[pPerson] = owedPayments[pPerson].concat("; pays " + oPerson + " $" + personOwed[oPerson])
+                                owedPayments[pPerson] = owedPayments[pPerson].concat("; " + oPerson + " $" + personOwed[oPerson])
                             }
                             else{
-                                owedPayments[pPerson] = "pays " + oPerson + " $" + personOwed[oPerson];
+                                owedPayments[pPerson] = "you need to pay " + oPerson + " $" + personOwed[oPerson];
                             }
                             personOwed[oPerson] = 0;
                         }
@@ -301,10 +301,10 @@ function splitCosts(){
                             let difference = personOwed[oPerson]
                             console.log(pPerson + "pays " + oPerson + " $" + difference + " but still owes " + personOwed[pPerson])
                             if(pPerson in owedPayments){
-                                owedPayments[pPerson] = owedPayments[pPerson].concat("; pays " + oPerson + " $" + difference)
+                                owedPayments[pPerson] = owedPayments[pPerson].concat("; " + oPerson + " $" + difference)
                             }
                             else{
-                                owedPayments[pPerson] = "pays " + oPerson + " $" + difference + " but still owes " + personOwed[pPerson]
+                                owedPayments[pPerson] = "you need to pay " + oPerson + " $" + difference
                             }
                             owedPayments[pPerson]
                             personOwed[oPerson] = 0;
@@ -318,24 +318,23 @@ function splitCosts(){
         }
     }
     console.log(owedPayments)
-    var table = document.getElementById("budget-repayments");
-    $("#budget-repayments tbody tr").remove();
+    // var table = document.getElementById("budget-repayments");
+    // $("#budget-repayments tbody tr").remove();
 
-    if (!jQuery.isEmptyObject(owedPayments)){
-        var headerRow = table.insertRow(-1);
-        var hcell0 = document.createElement("TH");
-        hcell0.innerHTML = "Person";
-        headerRow.appendChild(hcell0)
-        var hcell1 = document.createElement("TH");
-        hcell1.innerHTML = "Repayment details";        
-        headerRow.appendChild(hcell1)
-    }
+    // if (!jQuery.isEmptyObject(owedPayments)){
+    //     var headerRow = table.insertRow(-1);
+    //     var hcell0 = document.createElement("TH");
+    //     hcell0.innerHTML = "Person";
+    //     headerRow.appendChild(hcell0)
+    //     var hcell1 = document.createElement("TH");
+    //     hcell1.innerHTML = "Repayment details";        
+    //     headerRow.appendChild(hcell1)
+    // }
+    
     for (item in owedPayments) {
-        var row = table.insertRow();
-        var cell0 = row.insertCell(0);
-        var cell1 = row.insertCell(1);
-        cell0.innerHTML = item;
-        cell1.innerHTML = owedPayments[item];
+        if(item == local_name){
+            document.getElementById('budgetRepay').innerHTML = owedPayments[item]
+        }
     }
 }
 
@@ -487,6 +486,9 @@ ws.onmessage = function(serverData){
         calcAvailability();
         loadPeople();
         // loadDays();
+    }
+    else if(data['type'] == 'reset'){
+        document.location.reload(true);
     }
     else{
         console.log(data)
