@@ -61,10 +61,10 @@ $(function() {
     }, function(start, end, label) {
         let n = document.getElementById('inputFieldName').value;
         let e = moment(end);
-        // e.hour(0);
-        // e.minute(0);
-        // e.second(0);
-        // e.millisecond(0);
+        e.hour(0);
+        e.minute(0);
+        e.second(0);
+        e.millisecond(0);
         saveInputParams(n, start, e);
     });
 });
@@ -102,7 +102,7 @@ function calcAvailability() {
     endDate = moment.min(endDates);
     let tripLength = moment.duration(endDate.diff(startDate)).days();
     events = [];
-    for (let i = 0; i < tripLength; i++) {
+    for (let i = 0; i < tripLength + 1; i++) {
         events.push([]);
     }
     ws.send(JSON.stringify({'type': 'eventsArr', 'data': events}))
@@ -351,10 +351,8 @@ var test_price = 266.0
 $('#travelModal').on('shown.bs.modal', function (e) {
     
     //make call to get the flight data from the backend
-
     var name = '<h1>'+ test_name +'</h1>';
     var price = '<p>' + String(test_price)  +'$</p>';
-    //var flight_info = '<div class=flightContainer onclick=`addFlight(' + '"' + local_name + '"' + ', '+ '"'+ test_name + '"' + ', ' + '"' + String(price/2)  + '"' + ')`>' + name + price + '</div>'
     var flight_info = `<div class=flightContainer  data-dismiss="modal" onclick='addFlight("${local_name}","${test_name}","${test_price/2}")'>` + name + price + `</div>`;
     console.log(flight_info);
     var content = $(this).find('.container-fluid');
@@ -363,8 +361,8 @@ $('#travelModal').on('shown.bs.modal', function (e) {
   })
 
 function addFlight(eventPerson, eventItem, eventCost) {
-    let start = 0
-    let final = events.length - 1
+    let start = 0;
+    let final = events.length - 1;
     let person = eventPerson;
     let name = eventItem;
     let c = eventCost;
@@ -410,7 +408,7 @@ function loadEvents() {
         let iDate = moment(startDate);
         iDate = iDate.add(i, 'days').add(dayDisplayOffset, 'days');
         let index = moment.duration(iDate.diff(startDate)).days();
-        let tripLength = moment.duration(endDate.diff(startDate)).days();
+        let tripLength = moment.duration(endDate.diff(startDate)).days() + 1;
         if (index < 0 || index >= tripLength) {
             continue;
         }
@@ -493,4 +491,8 @@ ws.onmessage = function(serverData){
     else{
         console.log(data)
     }
+}
+
+function testBackend() {
+    
 }
