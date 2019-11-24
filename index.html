@@ -52,6 +52,9 @@
     <div class="container">
       <a class="navbar-brand" href="#">Travel.io</a>
     </div>
+    <div style="float:left;display:flex;width:25%;flex-direction:row-reverse">
+        <button type="button" class="btn btn-danger" onclick="resetAll()">Reset</button>
+    </div>
   </nav>
 
   <!-- Page Content -->
@@ -70,8 +73,13 @@
     </div>
     <div id="week-frame">
       <div id="days-toolbar">
-        <button class="btn btn-primary" onclick="changeDayDisplayOffset('left')">&lt;</button>
-        <button class="btn btn-primary" onclick="changeDayDisplayOffset('right')">&gt;</button>
+        <div id="days-toolbar-left">
+          <button class="btn btn-primary" onclick="changeDayDisplayOffset('left')">&lt;</button>
+          <button class="btn btn-primary" onclick="changeDayDisplayOffset('right')">&gt;</button>
+        </div>
+        <div id="days-toolbar-right">
+            <button class="btn btn-primary" onclick="handleSwitch()">Toggle Budget</button>
+        </div>
       </div>
       <div id="days-container">
         <div class="week-day" id="week-day-pane-0">
@@ -126,24 +134,20 @@
       </div>
     </div>
     <div id="budget-frame">
-      <div class="section-title">
-        Budget
+      <div class="budget-frame-header">
+        <div class="section-title">Budget</div>
+        <button class="btn btn-success budget-add-button" data-toggle="modal" data-target="#budgetModal" style="display:inline">Add Item</button>
       </div>
       <div class="budget-items-wrap">
-        <!-- <ul id="budget-items">
-        </ul> -->
         <table id="budget-items">
         </table>
       </div>
       <div class="budget-total-wrap">
-        Total: $<span id="budget-total"></span>
+        Total: $<span id="budget-total">0</span>
       </div>
     </div>
   </div>
   <div class="container" style="margin-top: 5px">
-    <button type="button" class="btn btn-primary" onclick="handleSwitch()">Toggle Budget</button>
-    <button type="button" class="btn btn-danger" onclick="resetAll()">Reset</button>
-    <button type="button" class="btn btn-success" data-toggle="modal" data-target="#budgetModal">Add to budget</button>
   </div>
 
   <!-- Event Modal -->
