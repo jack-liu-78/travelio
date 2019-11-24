@@ -132,7 +132,7 @@ def get_accomodations(city_name, check_in, check_out, num_adults):
             }
             hotel_list.append(single_hotel)
 
-    print(hotel_list)
+    return hotel_list
 
 if __name__ == '__main__':
 
