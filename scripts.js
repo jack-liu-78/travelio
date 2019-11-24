@@ -8,15 +8,8 @@ var weekdays = [
     "Saturday"
 ];
 /*
-1. landing page
-2. pick dates with popup
-3. generate events array with just that many days
-4. let the week frame be scrollable only within that time period
 5. send link to other people
 6. those people pick dates as well
-7. only show a date range that fits what everyone picks
-
-- in event creation dialogue, only allow a choice within the date range? or just pick within for the demo
 */
 
 /*
@@ -25,7 +18,6 @@ var weekdays = [
     - 'add event' popup ui
         - travel
         - accomodations
-        - restaurants
         - custom
     - hosting (GCP)
         - integrating websockets
@@ -73,7 +65,6 @@ $(function() {
         e.second(0);
         e.millisecond(0);
         saveInputParams(n, start, e);
-        console.log("A new date selection was made: " + start.toString() + ' to ' + e.toString());
     });
 });
 
@@ -148,8 +139,6 @@ function loadDays() {
             document.querySelector("#week-day-pane-" + i.toString() + " > div.event-add-button-wrap").style.display = 'none';
         }
     }
-    
-
 }
 
 function changeDayDisplayOffset(direction) {
@@ -232,11 +221,11 @@ function calculateBudget(){
 }
 
 $('#budgetModal').on('hidden.bs.modal', function (e) {
-    $(this)
-      .find("input,textarea")
-         .val('')
-         .end();
-  })
+$(this)
+    .find("input,textarea")
+        .val('')
+            .end();
+});
 
 function loadEvents() {
     for (let i = 0; i < 7; i++) {
