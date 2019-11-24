@@ -34,12 +34,19 @@ var endDate;
 
 var dayDisplayOffset = 0;
 
-var destination = "";
-
 var totalCost = 0;
 
 var nextEventDay = 0;
 var local_name = '';
+
+let x = () => {
+    if(destination !== ''){
+        document.getElementById('landing-page').style.display = "none";
+    }
+}
+
+x();
+
 function setNextEventDay(i) { nextEventDay = i; }
 
 var ws = new WebSocket("ws://127.0.0.1:1112")
@@ -53,6 +60,16 @@ function leaveLanding(e) {
         'top': '-=100%'
     }, 1000);
     $('#landing-page').fadeOut(400);
+
+    $.post({
+        url: "/setDestination",
+        data: {
+            'destination': destination
+        },
+        success: (e) =>{
+            console.log(e)
+        }
+    })
 }
 
 $(function() {

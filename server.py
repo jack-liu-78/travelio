@@ -3,15 +3,23 @@ import datetime
 import random
 import websockets
 import json
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 import threading
 
 
 app = Flask(__name__)
 
+destination = ''
+
 @app.route("/")
 def index():
-    return render_template("index.html")
+    return render_template("index.html", destination = destination)
+
+@app.route("/setDestination", methods = ['POST'])
+def setDestination():
+    destination = request.form['destination']
+    print(destination)
+    return 'OK'
 
 threading.Thread(target=app.run).start()
 
