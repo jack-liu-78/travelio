@@ -19,7 +19,6 @@ def get_flights(depart_date, return_date, depart_loc, destination):
     destination_dict = json.loads(data1)
 
     destination = destination_dict['Places'][0]['PlaceId']
-    print(destination)
 
     depart_date = depart_date
 
@@ -135,7 +134,7 @@ def get_accomodations(city_name, check_in, check_out, num_adults):
     return hotel_list
 
 if __name__ == '__main__':
-
     print(get_flights( "2020-04-04", "2020-04-29",  "YYZ", "Tokyo"))
     print(get_accomodations('Waterloo', '2019-12-17', '2019-12-25', 1))
+
 

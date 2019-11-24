@@ -34,8 +34,6 @@ var endDate;
 
 var dayDisplayOffset = 0;
 
-var destination = "";
-
 var totalCost = 0;
 
 var gottenHotels;
@@ -43,6 +41,15 @@ var gottenFlights;
 
 var nextEventDay = 0;
 var local_name = '';
+
+let x = () => {
+    if(destination !== ''){
+        document.getElementById('landing-page').style.display = "none";
+    }
+}
+
+x();
+
 function setNextEventDay(i) { nextEventDay = i; }
 
 var ws = new WebSocket("ws://127.0.0.1:1112")
@@ -56,6 +63,16 @@ function leaveLanding(e) {
         'top': '-=100%'
     }, 1000);
     $('#landing-page').fadeOut(400);
+
+    $.post({
+        url: "/setDestination",
+        data: {
+            'destination': destination
+        },
+        success: (e) =>{
+            console.log(e)
+        }
+    })
 }
 
 $(function() {
@@ -181,6 +198,15 @@ function resetAll() {
     calculateBudget();
     if (isSwitched) handleSwitch();
     ws.send(JSON.stringify({type: 'reset'}));
+    $.post({
+        url: "/setDestination",
+        data: {
+            'destination': ''
+        },
+        success: (e) =>{
+            console.log(e)
+        }
+    })
     render();
 }
 
@@ -345,18 +371,22 @@ $(this)
             .end();
 });
 
-var test_name = 'WestJet'
-var test_price = 266.0
 $('#travelModal').on('shown.bs.modal', function (e) {
     
     //make call to get the flight data from the backend
-    var name = '<h1>'+ test_name +'</h1>';
-    var price = '<p>' + String(test_price)  +'$</p>';
-    var flight_info = `<div class=flightContainer  data-dismiss="modal" onclick='addFlight("${local_name}","${test_name}","${test_price/2}")'>` + name + price + `</div>`;
-    console.log(flight_info);
-    var content = $(this).find('.container-fluid');
-    content.append(flight_info);
-    content.append(flight_info);
+    getBackendFlights();
+    let content = $(this).find('.container-fluid');
+
+    for (i = 0; i < gottenFlights.length; i++) {
+        let curr_info = gottenFlights[i];
+        let flight_name = curr_info['AirLine'];
+        let name = '<h1>'+ flight_name +'</h1>';
+        let flight_price = curr_info['Price']
+        let price = '<p>' + String(flight_price)  +'$</p>';
+        let flight_info = `<div class=flightContainer  data-dismiss="modal" onclick='addFlight("${local_name}","${flight_name}","${flight_price/2}")'>` + name + price + `</div>`;
+        content.append(flight_info);
+    }
+ 
   })
 
 function addFlight(eventPerson, eventItem, eventCost) {
@@ -376,23 +406,24 @@ function addFlight(eventPerson, eventItem, eventCost) {
     calculateBudget();   
 }
 
-var test_hotel = 'shangri-la'
-var hotel_price = 266
-var test_img = "http://r-ec.bstatic.com/xdata/images/hotel/square60/148085655.jpg?k=34e17d7d883196094efe05d1d73f8a60c5d6fee9c64ac2fba1987475d038631f&o="
 $('#accomodationsModal').on('shown.bs.modal', function (e) {
     
-    //make call to get the accomodation data from backend
-    //make sure to clear the the content variable before starting to append new content
-    let info = getBackendHotels();
-    let photo = '<img src='+ test_img +'>'
-    let name = '<h1>'+ test_hotel +'</h1>';
-    let price = '<p>' + String(hotel_price) +'$</p>';
-    let titles = '<div class="titles">' + name + price + '</div>'
-    let hotel_info = `<div class=accomodationsContainer data-dismiss="modal" onclick='addAccomodation("${local_name}","${test_hotel}","${hotel_price}")'>` + photo + titles + `</div>`;
-    console.log(hotel_info);
-    var content = $(this).find('.container-fluid');
-    content.append(hotel_info);
-    content.append(hotel_info);
+    getBackendHotels();
+
+    let content = $(this).find('.container-fluid');
+
+    for (i = 0; i < gottenHotels.length; i++) {
+        let curr_info = gottenHotels[i];
+        let photo = '<img src='+ curr_info['photo'] +'>';
+        let hotel_name = curr_info['name'];
+        let name = '<h1>'+ hotel_name  +'</h1>';
+        let hotel_price = curr_info['price']
+        let price = '<p>$' + String(hotel_price) +'</p>';
+        let rating = '<p>'+ 'Average Review: '+ String(curr_info['avg review']) +'</p>';
+        let titles = '<div class="titles">' + name + price + rating + '</div>';
+        let hotel_info = `<div class=accomodationsContainer data-dismiss="modal" onclick='addAccomodation("${local_name}","${hotel_name}","${hotel_price}")'>` + photo + titles + `</div>`;
+        content.append(hotel_info);
+      }
   })
 
 function addAccomodation(eventPerson, eventItem, eventCost){
@@ -496,8 +527,10 @@ ws.onmessage = function(serverData){
 }
 
 function getBackendFlights() {
-    $.post({
+    $.ajax({
+        type: "POST",
         url: "/flights",
+        async: false,
         data: {
             depart: startDate.format('YYYY-MM-DD'),
             return: endDate.format('YYYY-MM-DD'),
@@ -511,8 +544,10 @@ function getBackendFlights() {
 }
 
 function getBackendHotels() {
-    $.post({
+    $.ajax({
+        type: "POST",
         url: "/acco",
+        async: false,
         data: {
             city: destination,
             checkin: startDate.format('YYYY-MM-DD'),

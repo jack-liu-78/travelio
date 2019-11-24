@@ -19,6 +19,9 @@
   <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
   <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+  <script>
+    var destination = '{{ destination }}';
+  </script>
 </head>
 
 <body>
@@ -54,7 +57,6 @@
     </div>
     <div style="float:left;display:flex;width:25%;flex-direction:row-reverse">
         <button type="button" class="btn btn-danger" onclick="resetAll()">Reset</button>
-        <button type="button" class="btn btn-warning" onclick="testBackend()">backend</button>
     </div>
   </nav>
 
@@ -64,7 +66,7 @@
       <div class="day-name">
         Destination:
       </div>
-      <span id="destination-text" style="padding-left: 3px"></span>
+      <span id="destination-text" style="padding-left: 3px">{{ destination }}</span>
       <br></br>
       <div class="day-name">
         Travellers:
@@ -248,7 +250,7 @@
   <div class="modal-dialog modal-lg" role="document">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title" id="travelModalLabel">Pick a flight!</h5>
+        <h5 class="modal-title" id="travelModalLabel">Choose Your Accomodations!</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
