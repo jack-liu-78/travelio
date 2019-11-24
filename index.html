@@ -143,6 +143,7 @@
   <div class="container" style="margin-top: 5px">
     <button type="button" class="btn btn-primary" onclick="handleSwitch()">Toggle Budget</button>
     <button type="button" class="btn btn-danger" onclick="resetAll()">Reset</button>
+    <button type="button" class="btn btn-info" data-toggle="modal" data-target="#travelModal">Flight Options</button>
     <button type="button" class="btn btn-success" data-toggle="modal" data-target="#budgetModal">Add to budget</button>
   </div>
 
@@ -174,7 +175,6 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
-          <button type="button" class="btb btn-info" data-toggle="modal" data-target="#travelModal">Flight Options</button>
           <button type="button" class="btn btn-primary" onclick="addEvent(eventPerson.value, eventItem.value, eventCost.value)" data-dismiss="modal">Add!</button>
         </div>
       </div>

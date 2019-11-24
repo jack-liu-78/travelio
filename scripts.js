@@ -39,6 +39,7 @@ var destination = "";
 var totalCost = 0;
 
 var nextEventDay = 0;
+var local_name = '';
 function setNextEventDay(i) { nextEventDay = i; }
 
 var ws = new WebSocket("ws://127.0.0.1:1112")
@@ -79,6 +80,7 @@ function saveInputParams(n, start, end) {
     }
     if (setPerson) {
         people.push({name: n, aStart: start, aEnd: end});
+        local_name = n
     }
 }
 
@@ -227,29 +229,37 @@ $(this)
             .end();
 });
 
-var test_img = "http://r-ec.bstatic.com/xdata/images/hotel/square60/148085655.jpg?k=34e17d7d883196094efe05d1d73f8a60c5d6fee9c64ac2fba1987475d038631f&o="
-var test_name = 'hi'
+var test_name = 'WestJet'
+var test_price = 266
 $('#travelModal').on('shown.bs.modal', function (e) {
     
     //make call to get the flight data from the backend
-    flights
 
-    var hotel_img = '<img src=' + test_img + '>';
     var name = '<p>'+ test_name +'</p>';
-    var price = '<p>' + '266$' +'</p>';
-    var flight_info = '<div class=flightContainer onClick=addFlight()>' + hotel_img + name + price + '</div>'
-
+    var price = '<p>' + String(test_price) +'</p>';
+    //var flight_info = '<div class=flightContainer onclick=`addFlight(' + '"' + local_name + '"' + ', '+ '"'+ test_name + '"' + ', ' + '"' + String(price/2)  + '"' + ')`>' + name + price + '</div>'
+    var flight_info = `<div class=flightContainer onclick='addFlight("${local_name}","${test_name}","${test_price/2}")'>` + name + price + `</div>`;
+    console.log(flight_info);
     var content = $(this).find('.container-fluid');
     content.append(flight_info);
     content.append(flight_info);
   })
 
+function addFlight(eventPerson, eventItem, eventCost) {
+    let start = 0
+    let final = events.length - 1
+    let person = eventPerson;
+    let name = eventItem;
+    let c = eventCost;
+    ws.send(JSON.stringify({type:'event', name: name, cost: c, day: start}));
+    ws.send(JSON.stringify({type:'event', name: name, cost: c, day: final}));
+    addBudgetItem(person, name, c);
+    addBudgetItem(person, name, c);
+    events[start].push({person: person, name: name, cost: c});
+    events[final].push({person: person, name: name, cost: c});
 
-  function addFlight(){
-      
-      // addEvent(flight start_day)
-      // addEvent(flight end_day)
-    
+    loadDays();
+    calculateBudget();   
 }
 
 function loadEvents() {
