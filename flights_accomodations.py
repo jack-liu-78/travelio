@@ -53,8 +53,25 @@ def get_flights(depart_date, return_date, depart_loc, destination):
         single_flight["AirLine"] = airlines_formatted[flight_id]
         flights_formatted.append(single_flight)
 
+    return sort_and_remove(flights_formatted)
 
-    return flights_formatted
+def sort_and_remove(flights):
+    # sort list with key
+    flights.sort(key=takePrice)
+    
+    return removeDuplicates(flights)
+
+def removeDuplicates(flights):
+    airlines_seen = []
+    new_flight_list = []
+    for flight in flights:
+        if flight['AirLine'] not in airlines_seen:
+            new_flight_list.append(flight)
+            airlines_seen.append(flight['AirLine'])
+    return new_flight_list
+
+def takePrice(flight):
+    return flight['Price']
 
 
 def get_accomodations(city_name, check_in, check_out, num_adults):
@@ -135,6 +152,6 @@ def get_accomodations(city_name, check_in, check_out, num_adults):
 
 if __name__ == '__main__':
     print(get_flights( "2020-04-04", "2020-04-29",  "YYZ", "Tokyo"))
-    print(get_accomodations('Waterloo', '2019-12-17', '2019-12-25', 1))
+    #print(get_accomodations('Waterloo', '2019-12-17', '2019-12-25', 1))
 
 
