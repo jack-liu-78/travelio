@@ -114,6 +114,7 @@
 
 .day-name {
     font-size: 14px;
+    
 }
 
 .events-pane {
@@ -121,7 +122,7 @@
 }
 
 .event {
-    margin: 3px;
+    margin: 8px;
     padding: 5px;
     text-align: center;
     background: rgb(238, 238, 238);
@@ -131,10 +132,19 @@
     font-weight: bold;
 }
 
+.event-add-button-wrap {
+    display: none;
+    width: 7%;
+    float: bottom;
+}
+
+.event-add-button {
+    width: 80%;
+}
+
 #budget-frame {
     display: none;
     height: 100%;
-    border: 1px solid blue;
     width: 25%;
     overflow-y: scroll;
 }

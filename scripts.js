@@ -46,6 +46,9 @@ var destination = "";
 
 var totalCost = 0;
 
+var nextEventDay = 0;
+function setNextEventDay(i) { nextEventDay = i; }
+
 var ws = new WebSocket("ws://127.0.0.1:1112")
 
 function leaveLanding(e) {
@@ -139,8 +142,10 @@ function loadDays() {
         if (distEnd > 0) withinTrip = false;
         if (withinTrip) {
             document.getElementById("week-day-pane-" + i.toString()).style.backgroundColor = '#bbdfbd';
+            document.querySelector("#week-day-pane-" + i.toString() + " > div.event-add-button-wrap").style.display = 'initial';
         } else {
             document.getElementById("week-day-pane-" + i.toString()).style.backgroundColor = null;
+            document.querySelector("#week-day-pane-" + i.toString() + " > div.event-add-button-wrap").style.display = 'none';
         }
     }
     
@@ -255,19 +260,18 @@ function loadEvents() {
     }
 }
 
-function addEvent(name, cost, day) {
-    console.log(events);
-    let person = 'eventPers'
-    let c = cost;
-    let d = day;
-    if (name == "random") {
-        c = Math.floor(Math.random() * 200 + 100);
-        d = Math.floor(Math.random() * 7);
-    ws.send(JSON.stringify({type:'event', name: name, cost: c, day: d}))
-    }
+function addEvent(eventPerson, eventItem, eventCost) {
+    let i = nextEventDay;
+    let iDate = moment(startDate);
+    iDate = iDate.add(i, 'days').add(dayDisplayOffset, 'days');
+    let index = moment.duration(iDate.diff(startDate)).days();
+    let person = eventPerson;
+    let name = eventItem;
+    let c = eventCost;
+    ws.send(JSON.stringify({type:'event', name: name, cost: c, day: index}));
     addBudgetItem(person, name, c);
-    events[d].push({person: person, name: name, cost: c});
-    document.getElementById(`week-${d}-events`).innerHTML +=
+    events[index].push({person: person, name: name, cost: c});
+    document.getElementById(`week-${i}-events`).innerHTML +=
     `<div class="event">
         <div class="event-title">${name}</div>
         <div class="event-cost">$${c}</div>
