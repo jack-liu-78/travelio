@@ -301,7 +301,7 @@ function splitCosts(){
                                 owedPayments[pPerson] = owedPayments[pPerson].concat("; pays " + oPerson + " $" + difference)
                             }
                             else{
-                                owedPayments[pPerson] = "pays " + oPerson + " $" + difference + " but still owes " + personOwed[pPerson]
+                                owedPayments[pPerson] = "pays " + oPerson + " $" + difference
                             }
                             owedPayments[pPerson]
                             personOwed[oPerson] = 0;
@@ -318,21 +318,24 @@ function splitCosts(){
     var table = document.getElementById("budget-repayments");
     $("#budget-repayments tbody tr").remove();
 
-    if (!jQuery.isEmptyObject(owedPayments)){
-        var headerRow = table.insertRow(-1);
-        var hcell0 = document.createElement("TH");
-        hcell0.innerHTML = "Person";
-        headerRow.appendChild(hcell0)
-        var hcell1 = document.createElement("TH");
-        hcell1.innerHTML = "Repayment details";        
-        headerRow.appendChild(hcell1)
-    }
+    // if (!jQuery.isEmptyObject(owedPayments)){
+    //     var headerRow = table.insertRow(-1);
+    //     var hcell0 = document.createElement("TH");
+    //     hcell0.innerHTML = "Person";
+    //     headerRow.appendChild(hcell0)
+    //     var hcell1 = document.createElement("TH");
+    //     hcell1.innerHTML = "Repayment details";        
+    //     headerRow.appendChild(hcell1)
+    // }
+    
     for (item in owedPayments) {
-        var row = table.insertRow();
-        var cell0 = row.insertCell(0);
-        var cell1 = row.insertCell(1);
-        cell0.innerHTML = item;
-        cell1.innerHTML = owedPayments[item];
+        if(item == local_name){
+            var row = table.insertRow();
+            var cell0 = row.insertCell(0);
+            var cell1 = row.insertCell(1);
+            cell0.innerHTML = item;
+            cell1.innerHTML = owedPayments[item];
+        }
     }
 }
 

@@ -57,6 +57,7 @@ async def time(websocket, path):
             # await notify_users()
         async for message in websocket:
             data = json.loads(message)
+            print(data)
             if(data['type'] == 'budget'):
                 budgetItems.append({'person': data['person'], 'name': data['name'], 'cost': data['cost']})
                 await update_users()
@@ -74,8 +75,8 @@ async def time(websocket, path):
                 await update_users()
                 await update_user_list()
             elif(data['type'] == 'userList'):
-                userList.append(data['data'][0])
-                print(userList)
+                userList.append(data['data'][-1])
+                # print(userList)
                 await update_user_list()
             elif(data['type'] == 'eventsArr'):
                 events = data['data']
