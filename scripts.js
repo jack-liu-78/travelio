@@ -345,10 +345,10 @@ $('#travelModal').on('shown.bs.modal', function (e) {
     
     //make call to get the flight data from the backend
 
-    var name = '<p>'+ test_name +'</p>';
+    var name = '<h1>'+ test_name +'</h1>';
     var price = '<p>' + String(test_price) +'</p>';
     //var flight_info = '<div class=flightContainer onclick=`addFlight(' + '"' + local_name + '"' + ', '+ '"'+ test_name + '"' + ', ' + '"' + String(price/2)  + '"' + ')`>' + name + price + '</div>'
-    var flight_info = `<div class=flightContainer onclick='addFlight("${local_name}","${test_name}","${test_price/2}")'>` + name + price + `</div>`;
+    var flight_info = `<div class=flightContainer  data-dismiss="modal" onclick='addFlight("${local_name}","${test_name}","${test_price/2}")'>` + name + price + `</div>`;
     console.log(flight_info);
     var content = $(this).find('.container-fluid');
     content.append(flight_info);
@@ -370,6 +370,29 @@ function addFlight(eventPerson, eventItem, eventCost) {
 
     loadDays();
     calculateBudget();   
+}
+
+var test_hotel = 'shangri-la'
+var hotel_price = 266
+var test_img = "http://r-ec.bstatic.com/xdata/images/hotel/square60/148085655.jpg?k=34e17d7d883196094efe05d1d73f8a60c5d6fee9c64ac2fba1987475d038631f&o="
+$('#accomodationsModal').on('shown.bs.modal', function (e) {
+    
+    //make call to get the accomodation data from backend
+    //make sure to clear the the content variable before starting to append new content
+
+    var photo = '<img src='+ test_img +'>'
+    var name = '<h1>'+ test_hotel +'</h1>';
+    var price = '<p>' + String(hotel_price) +'</p>';
+    var titles = '<div class="titles">' + name + price + '</div>'
+    var hotel_info = `<div class=accomodationsContainer data-dismiss="modal" onclick='addAccomodation("${local_name}","${test_hotel}","${hotel_price}")'>` + photo + titles + `</div>`;
+    console.log(hotel_info);
+    var content = $(this).find('.container-fluid');
+    content.append(hotel_info);
+    content.append(hotel_info);
+  })
+
+function addAccomodation(eventPerson, eventItem, eventCost){
+    addBudgetItem(eventPerson, eventItem, eventCost)
 }
 
 function loadEvents() {

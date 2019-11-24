@@ -2,7 +2,7 @@ import http.client
 import json
 
 
-def get_flights(depart_date, return_date, depart_loc, arrive_loc):
+def get_flights(depart_date, return_date, depart_loc, destination):
     conn = http.client.HTTPSConnection("skyscanner-skyscanner-flight-search-v1.p.rapidapi.com")
 
     headers = {
@@ -10,15 +10,24 @@ def get_flights(depart_date, return_date, depart_loc, arrive_loc):
         'x-rapidapi-key': "988ea6ec2fmsh0f3000f19d710a2p154580jsn1ddc94e3585e"
         }
 
+    destination = destination.replace(" ", ",")
+    conn.request("GET", "/apiservices/autosuggest/v1.0/CA/CAD/en-us/?query=" + destination, headers=headers)
+
+    res = conn.getresponse()
+    data1 = res.read()
+    data1 = data1.decode("utf-8")
+    destination_dict = json.loads(data1)
+
+    destination = destination_dict['Places'][0]['PlaceId']
+    print(destination)
+
     depart_date = depart_date
 
     return_date = "?inboundpartialdate=" + return_date
 
     depart_location = depart_loc + "-sky"
-    destination = arrive_loc + "-sky"
     request_url = "/apiservices/browseroutes/v1.0/CA/CAD/en-US" + "/" + depart_location + "/" + destination + "/" + depart_date + return_date
 
-    # "/apiservices/browseroutes/v1.0/US/USD/en-US/JFK-sky/YYZ-sky/2019-12-10?inboundpartialdate=2019-12-14"
     conn.request("GET", request_url, headers=headers)
 
     res = conn.getresponse()
@@ -49,7 +58,7 @@ def get_flights(depart_date, return_date, depart_loc, arrive_loc):
     return flights_formatted
 
 
-def get_accomodations(city_name, check_in, check_out, num_adults, num_rooms):
+def get_accomodations(city_name, check_in, check_out, num_adults):
     conn = http.client.HTTPSConnection("apidojo-booking-v1.p.rapidapi.com")
 
     headers = {
@@ -82,7 +91,7 @@ def get_accomodations(city_name, check_in, check_out, num_adults, num_rooms):
                         + "&offset=0&dest_ids=" + city_id + "&guest_qty=" + \
                         str(num_adults) + "&arrival_date=" + check_in + \
                         "&departure_date=" + check_out + "&room_qty=" \
-                        + str(num_rooms)
+                        + str(1)
 
     conn.request("GET", hotel_request_url, headers=headers)
 
@@ -127,5 +136,6 @@ def get_accomodations(city_name, check_in, check_out, num_adults, num_rooms):
 
 if __name__ == '__main__':
 
-    print(get_flights( "2020-04-04", "2020-04-29",  "YYZ", "HNL"))
-    print(get_accomodations('Toronto', "2019-12-14", "2019-12-17", 1, 1))
+    print(get_flights( "2020-04-04", "2020-04-29",  "YYZ", "Tokyo"))
+    print(get_accomodations('Waterloo', '2019-12-17', '2019-12-25', 1))
+

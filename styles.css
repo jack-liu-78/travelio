@@ -197,7 +197,7 @@ table, th, td {
     background: lightgray;
 }
 
-#directory {
+#directory-flight {
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
@@ -210,12 +210,73 @@ table, th, td {
     background-color: #da7070;
     margin: 5px;
     padding: 2px;
-    justify-content: center;
+    justify-content: space-evenly;
+    align-items: center;
     text-align: center;
+    display: flex;
+}
+
+.flightContainer h1 {
+    font-family: Arial, Helvetica, sans-serif;
+    font-size: 35px;
 }
 
 .flightContainer p {
     font-family: Arial, Helvetica, sans-serif;
+    font-size: 25px;
+
+}
+
+.flightContainer:hover, .flightContainer:focus {
+    outline: 0;
+    box-shadow: 0px 5px 10px #7a3b3b;
+}
+
+#directory-accomodations {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    overflow: scroll;
+}
+
+.accomodationsContainer{
+    width: 200px;
+    height: 150px;
+    background-color: #da7070;
+    margin: 5px;
+    padding: 2px;
+    justify-content: center;
+    align-items: center;
+    text-align: center;
+    display: flex;
+}
+
+.accomodationsContainer img {
+    width: 120px;
+    height: 120px;
+    overflow: hidden;
+    padding: 10px;
+    margin: 1px;
+    object-fit: cover;
+}
+
+.accomodationsContainer:hover, .accomodationsContainer:focus {
+    outline: 0;
+    box-shadow: 0px 5px 10px #7a3b3b;
+}
+
+.titles {
+    justify-content: center;
+}
+
+.titles h1 {
+    font-family: Helvetica;
+    font-size: 20px;
+    padding: 5px;
+}
+
+.titles p {
+    font-family: Arial;
     font-size: 15px;
     padding: 5px;
 }
