@@ -61,10 +61,10 @@ $(function() {
     }, function(start, end, label) {
         let n = document.getElementById('inputFieldName').value;
         let e = moment(end);
-        // e.hour(0);
-        // e.minute(0);
-        // e.second(0);
-        // e.millisecond(0);
+        e.hour(0);
+        e.minute(0);
+        e.second(0);
+        e.millisecond(0);
         saveInputParams(n, start, e);
     });
 });
@@ -102,7 +102,7 @@ function calcAvailability() {
     endDate = moment.min(endDates);
     let tripLength = moment.duration(endDate.diff(startDate)).days();
     events = [];
-    for (let i = 0; i < tripLength; i++) {
+    for (let i = 0; i < tripLength + 1; i++) {
         events.push([]);
     }
     ws.send(JSON.stringify({'type': 'eventsArr', 'data': events}))
@@ -301,7 +301,7 @@ function splitCosts(){
                                 owedPayments[pPerson] = owedPayments[pPerson].concat("; pays " + oPerson + " $" + difference)
                             }
                             else{
-                                owedPayments[pPerson] = "pays " + oPerson + " $" + difference + " but still owes " + personOwed[pPerson]
+                                owedPayments[pPerson] = "pays " + oPerson + " $" + difference
                             }
                             owedPayments[pPerson]
                             personOwed[oPerson] = 0;
@@ -318,21 +318,24 @@ function splitCosts(){
     var table = document.getElementById("budget-repayments");
     $("#budget-repayments tbody tr").remove();
 
-    if (!jQuery.isEmptyObject(owedPayments)){
-        var headerRow = table.insertRow(-1);
-        var hcell0 = document.createElement("TH");
-        hcell0.innerHTML = "Person";
-        headerRow.appendChild(hcell0)
-        var hcell1 = document.createElement("TH");
-        hcell1.innerHTML = "Repayment details";        
-        headerRow.appendChild(hcell1)
-    }
+    // if (!jQuery.isEmptyObject(owedPayments)){
+    //     var headerRow = table.insertRow(-1);
+    //     var hcell0 = document.createElement("TH");
+    //     hcell0.innerHTML = "Person";
+    //     headerRow.appendChild(hcell0)
+    //     var hcell1 = document.createElement("TH");
+    //     hcell1.innerHTML = "Repayment details";        
+    //     headerRow.appendChild(hcell1)
+    // }
+    
     for (item in owedPayments) {
-        var row = table.insertRow();
-        var cell0 = row.insertCell(0);
-        var cell1 = row.insertCell(1);
-        cell0.innerHTML = item;
-        cell1.innerHTML = owedPayments[item];
+        if(item == local_name){
+            var row = table.insertRow();
+            var cell0 = row.insertCell(0);
+            var cell1 = row.insertCell(1);
+            cell0.innerHTML = item;
+            cell1.innerHTML = owedPayments[item];
+        }
     }
 }
 
@@ -348,10 +351,8 @@ var test_price = 266.0
 $('#travelModal').on('shown.bs.modal', function (e) {
     
     //make call to get the flight data from the backend
-
     var name = '<h1>'+ test_name +'</h1>';
     var price = '<p>' + String(test_price)  +'$</p>';
-    //var flight_info = '<div class=flightContainer onclick=`addFlight(' + '"' + local_name + '"' + ', '+ '"'+ test_name + '"' + ', ' + '"' + String(price/2)  + '"' + ')`>' + name + price + '</div>'
     var flight_info = `<div class=flightContainer  data-dismiss="modal" onclick='addFlight("${local_name}","${test_name}","${test_price/2}")'>` + name + price + `</div>`;
     console.log(flight_info);
     var content = $(this).find('.container-fluid');
@@ -360,8 +361,8 @@ $('#travelModal').on('shown.bs.modal', function (e) {
   })
 
 function addFlight(eventPerson, eventItem, eventCost) {
-    let start = 0
-    let final = events.length - 1
+    let start = 0;
+    let final = events.length - 1;
     let person = eventPerson;
     let name = eventItem;
     let c = eventCost;
@@ -407,7 +408,7 @@ function loadEvents() {
         let iDate = moment(startDate);
         iDate = iDate.add(i, 'days').add(dayDisplayOffset, 'days');
         let index = moment.duration(iDate.diff(startDate)).days();
-        let tripLength = moment.duration(endDate.diff(startDate)).days();
+        let tripLength = moment.duration(endDate.diff(startDate)).days() + 1;
         if (index < 0 || index >= tripLength) {
             continue;
         }
@@ -490,4 +491,8 @@ ws.onmessage = function(serverData){
     else{
         console.log(data)
     }
+}
+
+function testBackend() {
+    
 }
