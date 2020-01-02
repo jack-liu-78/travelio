@@ -9,7 +9,7 @@ The web app aggregates flight and accommodation details for the user's destinati
 
 To run the application, download repository and run ```main.py``` and go to ```http://localhost:5000/``` in a web browser to enter the workspace. 
 
-To have another user in the workspace, open another tab to ```http://localhost:5000/``` and make sure you use a different username
+To have another user in the workspace, open another tab to ```http://localhost:5000/``` and use a different username. When entering availabilty make sure to enter only future dates into the calendar
 
 
 ## Notes
@@ -18,5 +18,5 @@ You will need Flask installed to run application, originally built with Flask ve
 
 During original hackathon submission, application was hosted on Google Cloud Platform for demo but server is no longer active. To currently see application and multiple user features application must be locally hosted.
 
-When entering availability must enter date range that is in the future
+Calendar displays days in green for when all users are available for those dates, otherwise no events can be scheduled.
 
