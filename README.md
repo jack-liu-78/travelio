@@ -7,9 +7,9 @@ The web app aggregates flight and accommodation details for the user's destinati
 
 ## Getting Started
 
-To run the application, download repository and run '''main.py''' and go to '''http://localhost:5000/''' in a web browser to enter the workspace. 
+To run the application, download repository and run ```main.py``` and go to ```http://localhost:5000/``` in a web browser to enter the workspace. 
 
-To have another user in the workspace, open another tab to '''http://localhost:5000/''' and make sure you use a different username
+To have another user in the workspace, open another tab to ```http://localhost:5000/``` and make sure you use a different username
 
 
 ## Notes
