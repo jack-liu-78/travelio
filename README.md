@@ -18,3 +18,5 @@ You will need Flask installed to run application, originally built with Flask ve
 
 During original hackathon submission, application was hosted on Google Cloud Platform for demo but server is no longer active. To currently see application and multiple user features application must be locally hosted.
 
+When entering availability must enter date range that is in the future
+
