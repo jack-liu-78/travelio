@@ -1,4 +1,4 @@
-# Travelo.io
+# Travel.io
 Project made for Hack Western 6 Submission by Jack Liu, Jess Muir, Jennifer Chen
 
 Travel.io is a web app that allows users to collaborate with their travel mates to make the planning process as smooth-sailing as possible.
