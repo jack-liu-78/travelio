@@ -20,7 +20,7 @@ During original hackathon submission, application was hosted on Google Cloud Pla
 
 Calendar displays days in green for when all users are available for those dates, otherwise no events can be scheduled.
 
-Used Free API Keys for SkyScanner and Bookings.com API's so there is a request limit when trying to look up accomodations and flights to a destination.
+Used temporary free API Keys for SkyScanner and Bookings.com API's which have expired so no longer can pull accomodation and flight data :(
 
 Devpost: https://devpost.com/software/travel-io
 
